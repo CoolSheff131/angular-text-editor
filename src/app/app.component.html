@@ -1,1 +1,7 @@
-<input [(ngModel)]="text" (keyup)="onChange($event)" type="text">
+<h1>MAIN PAGE</h1>
+<ul>
+    <li><a [routerLink]="['/text', 1]">TEXT 1</a></li>
+    <li><a [routerLink]="['/text', 2]">TEXT 2</a></li>
+</ul>
+
+<router-outlet></router-outlet>
