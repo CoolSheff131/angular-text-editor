@@ -1,3 +1,1 @@
-<h1>Hello</h1>
-
-<button (click)="sendMessage()">SEND</button>
+<input [(ngModel)]="text" (keyup)="onChange($event)" type="text">

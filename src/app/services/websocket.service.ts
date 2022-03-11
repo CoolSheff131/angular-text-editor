@@ -10,44 +10,17 @@ export class WebsocketService {
   socket?: any;
   constructor() { }
 
-  public openWebSocket(){
+  public openWebSocket(callback: any){
     this.socket = io("http://localhost:3000");
 
     this.socket.on("connect", () => {
       console.log('connected');
     });
-    this.socket.on('a', ()=>{
-      console.log('messs');
-      
-    })
-    // this.subject = webSocket('ws://http://localhost:3000');
-     
-    // this.subject?.subscribe();
-    
-     
-    
-
-
-    // this.ws = new WebSocket('ws://localhost:3000/msg')
-    // this.ws.onerror = (e) =>{
-    //   console.log('err', e);
-    // }
-    // this.ws.onopen = (e) => {
-    //   console.log('open ' + e);
-    // }
-    // this.ws.onmessage = (e) => {
-    //      console.log(e);
-    // }
-    // this.ws.onclose = (e) => {
-    //   console.log('close' + e);      
-    // }
+    this.socket.on('msgFromServer', callback)
   }
 
-  public sendMessage(){
-
-    this.socket.emit('msg','asd')
-    // this.subject?.next({message: 'some message'});
-    //this.ws?.send('as')
+  public sendMessage(text: String){
+    this.socket.emit('msgToServer',text)
   }
   
 }

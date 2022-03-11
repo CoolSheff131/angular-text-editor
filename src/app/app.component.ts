@@ -8,14 +8,18 @@ import { WebsocketService } from './services/websocket.service';
 })
 export class AppComponent implements OnInit {
   title = 'angular-text-editor';
-
+  text = 'Hello';
   constructor(private webSocketService: WebsocketService){}
 
   ngOnInit(): void {
-    this.webSocketService.openWebSocket()
+    const callback = (payload: any) => {
+      this.text = payload
+    }
+
+    this.webSocketService.openWebSocket(callback)
   }
 
-  sendMessage(){  
-    this.webSocketService.sendMessage()
+  onChange(event: any){
+    this.webSocketService.sendMessage(event.target.value)
   }
 }
