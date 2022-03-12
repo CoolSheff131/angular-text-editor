@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
 import { TextEditorComponent } from './text-editor/text-editor.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,

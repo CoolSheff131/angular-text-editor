@@ -12,6 +12,8 @@ export class WebsocketService {
   constructor() { }
 
   public openWebSocket(callback: any, textId: string, user: string){
+    console.log('opened');
+    
     this.socket.on("connect", () => {
       console.log('connected');
     });
@@ -25,12 +27,14 @@ export class WebsocketService {
       console.log(text);
     })
     this.socket.emit('joinRoom',{textId, user})
-
+    console.log('joinedRoom',textId);
+    
     this.socket.on('msgFromServer', callback)
   }
 
   public sendMessage(text: String){
-
+    console.log('sended: ',text);
+    
     this.socket.emit('msgToServer',{textId: this.textId, text})
   }
 
