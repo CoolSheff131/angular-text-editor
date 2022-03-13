@@ -12,7 +12,7 @@ import { Config, TextService } from './services/text.service';
 })
 export class AppComponent implements OnInit {
   title = 'angular-text-editor';
-  inText = 'asd'
+  inText = ''
 
   constructor(private webSocketService: WebsocketService,
     private route: Router,
@@ -32,8 +32,8 @@ export class AppComponent implements OnInit {
       this.webSocketService.openWebSocket(callback, 'test', 'aa' )
       this.textService.getTextData('test').subscribe((data: any) => {
         console.log(data);
-        console.log('comes', JSON.stringify(data));
-        this.inText = JSON.stringify(data)
+        console.log('comes', data);
+        this.inText = data
       })
     }
     

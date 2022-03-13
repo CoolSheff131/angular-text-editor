@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 export interface Config {
-  text: string
+  text: string,
 }
 
 @Injectable({
@@ -14,6 +14,6 @@ export class TextService {
 
 
   getTextData(id: string){
-    return this.http.get<Config>(`http://localhost:3000/${id}`)
+    return this.http.get(`http://localhost:3000/${id}`, {responseType: 'text' })
   }
 }
