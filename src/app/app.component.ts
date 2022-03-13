@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { WebsocketService } from './services/websocket.service';
 
 import { Router } from '@angular/router';
-import EditorJS from '@editorjs/editorjs';
 import { Config, TextService } from './services/text.service';
 
 @Component({
