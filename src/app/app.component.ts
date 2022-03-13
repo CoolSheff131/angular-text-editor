@@ -3,6 +3,7 @@ import { WebsocketService } from './services/websocket.service';
 
 import { Router } from '@angular/router';
 import EditorJS from '@editorjs/editorjs';
+import { Config, TextService } from './services/text.service';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,8 @@ export class AppComponent implements OnInit {
   editor?: EditorJS;
 
   constructor(private webSocketService: WebsocketService,
-    private route: Router) { }
+    private route: Router,
+    private textService: TextService) { }
 
     ngOnDestroy(): void {
       console.log('Destroyed');
@@ -49,6 +51,18 @@ export class AppComponent implements OnInit {
         }
       }
       this.webSocketService.openWebSocket(callback, 'test', 'aa' )
+      this.textService.getTextData('test').subscribe((data: any) => {
+        console.log(data);
+        
+        console.log('comes', JSON.stringify(data));
+        
+        this.editorData = JSON.stringify(data)
+        this.editor?.isReady.then(()=>{
+            if(this.editor){
+            this.editor.blocks.render(data)
+          }
+          })
+      })
     }
 
     saveEditorData() : void {
