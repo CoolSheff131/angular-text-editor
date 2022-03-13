@@ -4,21 +4,9 @@
     <li><a [routerLink]="['/text', 2]">TEXT 2</a></li>
 </ul>
 
-
-<div class="articleEditor">
-
-    <div class="panelOne">
-        <h2>Editor JS</h2>
-        <div id="editorjs"></div>
-    </div>
-
-    <div class="panelTwo">
-        <h2>Clean Data</h2>
-        <div class="articleDataContainer">
-            <p>{{ editorData }}</p>
-        </div>
-    </div>
-
+<div>
+    <quill-editor [(ngModel)]="inText" (onContentChanged)="ContentChangedHandler($event)"></quill-editor>
 </div>
+
 
 <router-outlet></router-outlet>

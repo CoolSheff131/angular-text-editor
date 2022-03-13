@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
 import { TextEditorComponent } from './text-editor/text-editor.component';
 import { HttpClientModule } from '@angular/common/http';
+import { QuillModule } from 'ngx-quill'
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { HttpClientModule } from '@angular/common/http';
     RouterModule.forRoot([
       {path:'text/:textId', component: TextEditorComponent},
       {path:'main', component: AppComponent},
-    ])
+    ]),
+    QuillModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]
