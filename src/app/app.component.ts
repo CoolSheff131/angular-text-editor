@@ -7,38 +7,51 @@ import { Config, TextService } from './services/text.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
   title = 'angular-text-editor';
-  inText = ''
+  inText = '';
 
-  constructor(private webSocketService: WebsocketService,
+  constructor(
+    private webSocketService: WebsocketService,
     private route: Router,
-    private textService: TextService) { }
+    private textService: TextService
+  ) {}
 
-    ngOnDestroy(): void {
-      console.log('Destroyed');
-      this.webSocketService.leaveRoom()
+  ngOnDestroy(): void {
+    console.log('Destroyed');
+    this.webSocketService.leaveRoom();
+  }
+
+  ngOnInit(): void {
+    console.log('Init App');
+
+    const callback = (payload: any) => {
+      this.inText = payload;
+    };
+    this.webSocketService.openWebSocket(callback, 'test', 'aa');
+    this.textService.getTextData('test').subscribe((data: any) => {
+      console.log(data);
+      console.log('comes', data);
+      this.inText = data;
+    });
+  }
+
+  ContentChangedHandler(event: any) {
+    if (event.source === 'user') {
+      this.webSocketService.sendMessage(this.inText);
     }
-  
-    ngOnInit(): void {
-      console.log('Init App');
-  
-      const callback = (payload: any) => {
-        this.inText = payload
-      }
-      this.webSocketService.openWebSocket(callback, 'test', 'aa' )
-      this.textService.getTextData('test').subscribe((data: any) => {
-        console.log(data);
-        console.log('comes', data);
-        this.inText = data
-      })
-    }
-    
-    ContentChangedHandler(event: any ){ 
-      if(event.source === 'user'){
-        this.webSocketService.sendMessage(this.inText)
-      }
-    }
+  }
+
+  save() {
+    this.textService.save(this.title, this.inText).subscribe((data) => {
+      console.log(data);
+    });
+  }
+  getMine() {
+    this.textService.getMine().subscribe((data) => {
+      console.log(data);
+    });
+  }
 }

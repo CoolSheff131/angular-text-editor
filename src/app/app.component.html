@@ -10,6 +10,8 @@
 </ul> -->
 
 <div>
+    <button (click)="getMine()">GET MINE</button>
+    <button (click)="save()">SAVE</button>
     <quill-editor [(ngModel)]="inText" (onContentChanged)="ContentChangedHandler($event)"></quill-editor>
 </div>
 

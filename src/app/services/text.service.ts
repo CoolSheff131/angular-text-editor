@@ -17,4 +17,12 @@ export class TextService {
       responseType: 'text',
     });
   }
+
+  save(title: string, content: string) {
+    return this.http.post(`http://localhost:3000/text`, { title, content });
+  }
+
+  getMine() {
+    return this.http.get(`http://localhost:3000/text`);
+  }
 }
