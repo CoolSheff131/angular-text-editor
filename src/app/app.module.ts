@@ -4,29 +4,39 @@ import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
 import { TextEditorComponent } from './text-editor/text-editor.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { QuillModule } from 'ngx-quill';
 import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component'
+import { RegisterComponent } from './register/register.component';
+import { TokenInterceptor } from './services/token.interceptor';
+import { MainComponent } from './main/main.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TextEditorComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    MainComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
     RouterModule.forRoot([
-      {path:'text/:textId', component: TextEditorComponent},
-      {path:'main', component: AppComponent},
+      { path: 'text/:textId', component: TextEditorComponent },
+      { path: 'main', component: AppComponent },
     ]),
     QuillModule.forRoot(),
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true,
+    },
+  ],
+
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
