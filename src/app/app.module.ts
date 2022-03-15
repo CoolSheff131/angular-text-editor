@@ -6,13 +6,15 @@ import { RouterModule } from '@angular/router';
 import { TextEditorComponent } from './text-editor/text-editor.component';
 import { HttpClientModule } from '@angular/common/http';
 import { QuillModule } from 'ngx-quill';
-import { LoginComponent } from './login/login.component'
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component'
 
 @NgModule({
   declarations: [
     AppComponent,
     TextEditorComponent,
-    LoginComponent
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
