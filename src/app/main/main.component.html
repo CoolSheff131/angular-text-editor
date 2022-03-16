@@ -1,8 +1,5 @@
 <p>
     <mat-toolbar>
-        <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
-            <mat-icon>menu</mat-icon>
-        </button>
         <span>Welcome {{fullname}}</span>
         <span class="example-spacer"></span>
         <button (click)="signOut()" mat-icon-button class="example-icon favorite-icon"
@@ -11,5 +8,17 @@
         </button>
     </mat-toolbar>
 </p>
+<button (click)="createText()">Create new Text</button>
 
-<button (click)="getMe()">GET ME</button>
+<div>
+    <ul class="texts">
+        <li class="texts__item" *ngFor="let text of texts">
+            <a [routerLink]="['/text/', text.id]">
+                <mat-icon class="texts__item__icon">description</mat-icon>
+                <h6 class="texts__item__title">
+                    {{text.title}}
+                </h6>
+            </a>
+        </li>
+    </ul>
+</div>

@@ -1,3 +1,26 @@
 .example-spacer {
   flex: 1 1 auto;
 }
+
+.texts {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.texts__item {
+  list-style: none;
+  margin-right: 20px;
+}
+
+.texts__item__title {
+  font-size: 30px;
+}
+
+.texts__item__icon {
+  font-size: 50px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}

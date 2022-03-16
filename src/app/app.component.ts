@@ -43,15 +43,4 @@ export class AppComponent implements OnInit {
       this.webSocketService.sendMessage(this.inText);
     }
   }
-
-  save() {
-    this.textService.save(this.title, this.inText).subscribe((data) => {
-      console.log(data);
-    });
-  }
-  getMine() {
-    this.textService.getMine().subscribe((data) => {
-      console.log(data);
-    });
-  }
 }

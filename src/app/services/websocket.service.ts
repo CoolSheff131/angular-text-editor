@@ -1,45 +1,39 @@
 import { Injectable } from '@angular/core';
-import { io } from "socket.io-client";
+import { io } from 'socket.io-client';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WebsocketService {
+  // subject: any
+  // socket = io("http://localhost:3000")
+  // textId?: string
+  // user?: string
+  constructor() {}
 
-  subject: any
-  socket = io("http://localhost:3000")
-  textId?: string
-  user?: string
-  constructor() { }
-
-  public openWebSocket(callback: any, textId: string, user: string){
-    console.log('opened');
-    
-    this.socket.on("connect", () => {
-      console.log('connected');
-    });
-
-    this.textId = textId
-    this.user = user
-    this.socket.on('joinedRoom',(text:string)=>{
-      console.log(text);
-    })
-    this.socket.on('leftRoom',(text:string)=>{
-      console.log(text);
-    })
-    this.socket.emit('joinRoom',{textId, user})
-    console.log('joinedRoom',textId);
-    
-    this.socket.on('msgFromServer', callback)
+  public openWebSocket(callback: any, textId: string, user: string) {
+    // console.log('opened');
+    // this.socket.on("connect", () => {
+    //   console.log('connected');
+    // });
+    // this.textId = textId
+    // this.user = user
+    // this.socket.on('joinedRoom',(text:string)=>{
+    //   console.log(text);
+    // })
+    // this.socket.on('leftRoom',(text:string)=>{
+    //   console.log(text);
+    // })
+    // this.socket.emit('joinRoom',{textId, user})
+    // console.log('joinedRoom',textId);
+    // this.socket.on('msgFromServer', callback)
   }
 
-  public sendMessage(text: String){
-    console.log('sended: ',text);
-    
-    this.socket.emit('msgToServer',{textId: this.textId, text})
+  public sendMessage(text: String) {
+    // console.log('sended: ',text);
+    // this.socket.emit('msgToServer',{textId: this.textId, text})
   }
 
-  public leaveRoom(){
-    this.socket.emit('leaveRoom', {textId: this.textId, user: this.user})
+  public leaveRoom() {
+    // this.socket.emit('leaveRoom', {textId: this.textId, user: this.user})
   }
-  
 }

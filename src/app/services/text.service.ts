@@ -18,7 +18,7 @@ export class TextService {
     });
   }
 
-  save(title: string, content: string) {
+  create(title: string, content: string) {
     return this.http.post(`http://localhost:3000/text`, { title, content });
   }
 

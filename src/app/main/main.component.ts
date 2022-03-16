@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Text } from '../models/text.model';
 import { AuthService } from '../services/auth.service';
+import { TextService } from '../services/text.service';
 import { UserService } from '../services/user.service';
 
 @Component({
@@ -10,12 +12,16 @@ import { UserService } from '../services/user.service';
 })
 export class MainComponent implements OnInit {
   fullname = '';
+  texts?: Text[];
+
   constructor(
     private readonly userService: UserService,
-    private authService: AuthService,
-    private router: Router
+    private readonly authService: AuthService,
+    private readonly router: Router,
+    private readonly textService: TextService
   ) {
     this.getMe();
+    this.getTexts();
   }
 
   ngOnInit(): void {}
@@ -27,8 +33,21 @@ export class MainComponent implements OnInit {
     });
   }
 
+  getTexts() {
+    this.textService.getMine().subscribe((data: any) => {
+      this.texts = data;
+      console.log(this.texts);
+    });
+  }
+
   signOut() {
     this.authService.signOut();
     this.router.navigate(['/login']);
+  }
+
+  createText() {
+    this.textService.create('test', '').subscribe((data) => {
+      console.log(data);
+    });
   }
 }
