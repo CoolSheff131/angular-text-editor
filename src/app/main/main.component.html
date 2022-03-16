@@ -1,3 +1,15 @@
-<p>main works!</p>
+<p>
+    <mat-toolbar>
+        <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+            <mat-icon>menu</mat-icon>
+        </button>
+        <span>Welcome {{fullname}}</span>
+        <span class="example-spacer"></span>
+        <button (click)="signOut()" mat-icon-button class="example-icon favorite-icon"
+            aria-label="Example icon-button with heart icon">
+            <mat-icon>exit_to_app</mat-icon>
+        </button>
+    </mat-toolbar>
+</p>
 
 <button (click)="getMe()">GET ME</button>

@@ -26,4 +26,8 @@ export class AuthService {
       password,
     });
   }
+
+  signOut() {
+    localStorage.removeItem('token');
+  }
 }
