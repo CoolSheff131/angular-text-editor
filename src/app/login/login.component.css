@@ -1,0 +1,33 @@
+.example-container .mat-form-field + .mat-form-field {
+  margin-left: 8px;
+}
+
+.example-right-align {
+  text-align: right;
+}
+
+input.example-right-align::-webkit-outer-spin-button,
+input.example-right-align::-webkit-inner-spin-button {
+  display: none;
+}
+
+input.example-right-align {
+  -moz-appearance: textfield;
+}
+
+.my-container {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 500px;
+  padding: 20px 50px;
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.text-center {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+}
