@@ -11,36 +11,8 @@ import { Config, TextService } from './services/text.service';
 })
 export class AppComponent implements OnInit {
   title = 'angular-text-editor';
-  inText = '';
 
-  constructor(
-    private webSocketService: WebsocketService,
-    private route: Router,
-    private textService: TextService
-  ) {}
+  constructor() {}
 
-  ngOnDestroy(): void {
-    console.log('Destroyed');
-    this.webSocketService.leaveRoom();
-  }
-
-  ngOnInit(): void {
-    console.log('Init App');
-
-    const callback = (payload: any) => {
-      this.inText = payload;
-    };
-    this.webSocketService.openWebSocket(callback, 'test', 'aa');
-    this.textService.getTextData('test').subscribe((data: any) => {
-      console.log(data);
-      console.log('comes', data);
-      this.inText = data;
-    });
-  }
-
-  ContentChangedHandler(event: any) {
-    if (event.source === 'user') {
-      this.webSocketService.sendMessage(this.inText);
-    }
-  }
+  ngOnInit(): void {}
 }

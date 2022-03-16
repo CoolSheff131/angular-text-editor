@@ -1,2 +1,9 @@
-<h1>TEXT EDITOR </h1>
-<input [(ngModel)]="text" (keyup)="onChange($event)" type="text">
+<div class="title__wrapper">
+    <input matInput [formControl]="titleCtrl" required>
+    <button mat-icon-button>
+        <mat-icon>create</mat-icon>
+    </button>
+</div>
+<mat-card class="my-container" *ngIf="text">
+    <quill-editor [(ngModel)]="text.content" (onContentChanged)="ContentChangedHandler($event)"></quill-editor>
+</mat-card>
