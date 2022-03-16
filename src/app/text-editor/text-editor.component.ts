@@ -14,7 +14,6 @@ import { WebsocketService } from '../services/websocket.service';
 })
 export class TextEditorComponent implements OnInit {
   users: User[] | undefined;
-  textId: string | undefined;
   text!: Text;
   titleCtrl: FormControl;
 
@@ -27,7 +26,6 @@ export class TextEditorComponent implements OnInit {
     this.activateRoute.paramMap
       .pipe(switchMap((params) => params.getAll('id')))
       .subscribe((id) => {
-        this.textId = id;
         this.textService.getTextById(id).subscribe((data) => {
           this.text = JSON.parse(data);
           this.titleCtrl.setValue(this.text?.title);
@@ -47,6 +45,18 @@ export class TextEditorComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  updateTitle() {
+    this.textService
+      .updateTextById(
+        this.text.id,
+        this.titleCtrl.value,
+        this.text.content || ''
+      )
+      .subscribe((data) => {
+        console.log(data);
+      });
+  }
 
   ngOnDestroy(): void {
     console.log('Destroyed');

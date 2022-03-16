@@ -18,6 +18,13 @@ export class TextService {
     });
   }
 
+  updateTextById(id: string, title: string, content: string): Observable<any> {
+    return this.http.patch(`http://localhost:3000/text/${id}`, {
+      title,
+      content,
+    });
+  }
+
   create(title: string, content: string) {
     return this.http.post(`http://localhost:3000/text`, { title, content });
   }
