@@ -1,16 +1,28 @@
-<p>Register works!</p>
+<div>
+    <mat-card class="my-container">
 
-<div>
-    <label for="">fullname</label>
-    <input [(ngModel)]="fullname" type="text">
-</div>
-<div>
-    <label for="">email</label>
-    <input [(ngModel)]="email" type="email">
-</div>
-<div>
-    <label for="">password</label>
-    <input [(ngModel)]="password" type="password">
-</div>
 
-<button (click)="register()">Register</button>
+        <mat-form-field>
+            <mat-label>Enter fullname</mat-label>
+            <input matInput placeholder="Mikel" [formControl]="fullnameCtrl" required>
+            <!-- <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error> -->
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Enter your email</mat-label>
+            <input matInput placeholder="pat@example.com" [formControl]="emailCtrl" required>
+            <!-- <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error> -->
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Enter your password</mat-label>
+            <input matInput [type]="hide ? 'password' : 'text'" [formControl]="passwordCtrl" required>
+            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                [attr.aria-pressed]="hide">
+                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+        </mat-form-field>
+        <button mat-raised-button (click)="register()" type="button">Register</button>
+        <p class="text-center">already have a account?</p>
+        <button mat-button (click)="gotoLogin()" type="button">Login</button>
+    </mat-card>
+</div>
