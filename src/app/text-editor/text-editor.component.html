@@ -4,15 +4,15 @@
     </a>
 </div>
 <div class="header">
-    <button mat-icon-button (click)="updateText()">
+    <button mat-icon-button (click)="saveChanges()">
         SAVE
         <!-- <mat-icon>create</mat-icon> -->
     </button>
 
     <div class="users__wrapper">
         <h6 class="users__title">USERS</h6>
-        <ul class="users">
-            <li class="users__item">John</li>
+        <ul class="users" *ngFor="let user of usersInRoom">
+            <li class="users__item">{{user.fullname}}</li>
             <li class="users__item">Mikel</li>
         </ul>
     </div>

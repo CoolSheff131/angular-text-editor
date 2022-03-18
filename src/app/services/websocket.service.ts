@@ -1,39 +1,62 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { io } from 'socket.io-client';
+import { User } from '../models/user.model';
 @Injectable({
   providedIn: 'root',
 })
 export class WebsocketService {
   // subject: any
-  // socket = io("http://localhost:3000")
-  // textId?: string
-  // user?: string
-  constructor() {}
+  private _socket;
+  private _usersInRoom: BehaviorSubject<User[]> = new BehaviorSubject<User[]>(
+    []
+  );
+  public usersInRoom: Observable<User[]> = this._usersInRoom.asObservable();
+  // private _text: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  // public text: Observable<string> = this._text.asObservable();
 
-  public openWebSocket(callback: any, textId: string, user: string) {
-    // console.log('opened');
-    // this.socket.on("connect", () => {
-    //   console.log('connected');
-    // });
-    // this.textId = textId
-    // this.user = user
-    // this.socket.on('joinedRoom',(text:string)=>{
-    //   console.log(text);
-    // })
-    // this.socket.on('leftRoom',(text:string)=>{
-    //   console.log(text);
-    // })
-    // this.socket.emit('joinRoom',{textId, user})
-    // console.log('joinedRoom',textId);
-    // this.socket.on('msgFromServer', callback)
+  textId?: string;
+  user?: User;
+  constructor() {
+    this._socket = io('http://localhost:3000');
+    this._socket.on('joinedRoom', (joinedUser: User) => {
+      this._usersInRoom.next([...this._usersInRoom.getValue(), joinedUser]);
+    });
+
+    this._socket.on('leftRoom', (leftUser: User) => {
+      let usersInRoom = this._usersInRoom.getValue();
+      usersInRoom = usersInRoom.filter(
+        (userInRoom) => userInRoom.id !== leftUser.id
+      );
+      this._usersInRoom.next(usersInRoom);
+    });
   }
 
-  public sendMessage(text: String) {
-    // console.log('sended: ',text);
-    // this.socket.emit('msgToServer',{textId: this.textId, text})
+  public openWebSocket(callback: any, textId: string, user: User) {
+    this.user = user;
+    this.textId = textId;
+    console.log('textId', textId);
+
+    this._socket.emit('joinRoom', { textId, user });
+    this._socket.on('msgFromServer', callback);
+  }
+
+  public sendMessage(text: any) {
+    console.log(text);
+
+    this._socket.emit('msgToServer', { textId: this.textId, text });
+  }
+
+  public addUsers(users: User[]) {
+    this._usersInRoom.next(users);
   }
 
   public leaveRoom() {
-    // this.socket.emit('leaveRoom', {textId: this.textId, user: this.user})
+    console.log('leave');
+    if (this.textId && this.user) {
+      console.log('left');
+
+      this._socket.emit('leaveRoom', { textId: this.textId, user: this.user });
+    }
   }
 }

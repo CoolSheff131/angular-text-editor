@@ -5,6 +5,7 @@ import { switchMap } from 'rxjs';
 import { Text } from '../models/text.model';
 import { User } from '../models/user.model';
 import { TextService } from '../services/text.service';
+import { UserService } from '../services/user.service';
 import { WebsocketService } from '../services/websocket.service';
 
 @Component({
@@ -13,40 +14,54 @@ import { WebsocketService } from '../services/websocket.service';
   styleUrls: ['./text-editor.component.css'],
 })
 export class TextEditorComponent implements OnInit {
-  users: User[] | undefined;
+  usersInRoom: User[] | undefined;
+  userMe!: User;
   text!: Text;
   titleCtrl: FormControl;
 
   constructor(
     private webSocketService: WebsocketService,
     private activateRoute: ActivatedRoute,
-    private textService: TextService
+    private textService: TextService,
+    private userService: UserService
   ) {
     this.titleCtrl = new FormControl();
-    this.activateRoute.paramMap
-      .pipe(switchMap((params) => params.getAll('id')))
-      .subscribe((id) => {
-        this.textService.getTextById(id).subscribe((data) => {
-          this.text = JSON.parse(data);
-          this.titleCtrl.setValue(this.text?.title);
-          console.log(this.text);
-        });
+    this.webSocketService.usersInRoom.subscribe((usersInRoom) => {
+      this.usersInRoom = usersInRoom;
+    });
+    this.userService.getMe().subscribe((userData) => {
+      this.userMe = userData;
+      this.activateRoute.paramMap
+        .pipe(switchMap((params) => params.getAll('id')))
+        .subscribe((id) => {
+          this.textService.getTextByIdToEdit(id).subscribe((data) => {
+            this.webSocketService.leaveRoom();
+            const roomData = JSON.parse(data);
+            this.text = roomData.data;
+            this.titleCtrl.setValue(this.text?.title);
+            console.log(roomData);
+            this.webSocketService.addUsers(roomData.users);
+            this.webSocketService.openWebSocket(
+              (payload: any) => {
+                if (this.text) {
+                  console.log(payload);
 
-        this.webSocketService.openWebSocket(
-          (payload: any) => {
-            if (this.text) {
-              this.text.content = payload;
-            }
-          },
-          'test',
-          'aa'
-        );
-      });
+                  this.text = payload;
+                }
+              },
+              id,
+              this.userMe
+            );
+          });
+        });
+    });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    window.onbeforeunload = () => this.ngOnDestroy();
+  }
 
-  updateText() {
+  saveChanges() {
     this.textService
       .updateTextById(
         this.text.id,
@@ -65,7 +80,7 @@ export class TextEditorComponent implements OnInit {
 
   ContentChangedHandler(event: any) {
     if (event.source === 'user' && this.text.content) {
-      this.webSocketService.sendMessage(this.text.content);
+      this.webSocketService.sendMessage(this.text);
     }
   }
 }

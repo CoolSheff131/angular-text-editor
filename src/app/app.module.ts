@@ -32,7 +32,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     FormsModule,
     HttpClientModule,
     RouterModule.forRoot([
-      { path: 'text/:id', component: TextEditorComponent },
+      { path: 'text/:id/edit', component: TextEditorComponent },
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },
       { path: '', component: MainComponent },
