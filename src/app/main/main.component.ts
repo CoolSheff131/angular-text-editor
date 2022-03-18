@@ -55,6 +55,7 @@ export class MainComponent implements OnInit {
   createText() {
     this.textService.create('test', '').subscribe((data) => {
       console.log(data);
+      this.getTexts();
     });
   }
 }

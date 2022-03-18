@@ -6,6 +6,29 @@
   margin: 0 auto;
 }
 
+.header {
+  display: flex;
+}
+
+.users__wrapper {
+  margin-left: 20px;
+}
+
+.users {
+  display: flex;
+  padding: 0;
+  margin: 0;
+}
+
+.users__title {
+  padding: 0;
+  margin: 0;
+}
+
+.users__item {
+  list-style-type: none;
+  margin-right: 20px;
+}
 .title__wrapper {
   display: flex;
   align-items: center;

@@ -46,7 +46,7 @@ export class TextEditorComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  updateTitle() {
+  updateText() {
     this.textService
       .updateTextById(
         this.text.id,
