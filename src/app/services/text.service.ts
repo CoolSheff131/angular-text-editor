@@ -25,6 +25,10 @@ export class TextService {
     });
   }
 
+  deleteById(id: string) {
+    return this.http.delete(`http://localhost:3000/text/${id}`);
+  }
+
   create(title: string, content: string) {
     return this.http.post(`http://localhost:3000/text`, { title, content });
   }

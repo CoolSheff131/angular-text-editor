@@ -40,6 +40,13 @@ export class MainComponent implements OnInit {
     });
   }
 
+  deleteText(id: string) {
+    this.textService.deleteById(id).subscribe((data) => {
+      console.log(data);
+      this.getTexts();
+    });
+  }
+
   signOut() {
     this.authService.signOut();
     this.router.navigate(['/login']);
