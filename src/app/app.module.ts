@@ -19,6 +19,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { TextViewComponent } from './text-view/text-view.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,12 +27,14 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     LoginComponent,
     RegisterComponent,
     MainComponent,
+    TextViewComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
     RouterModule.forRoot([
+      { path: 'text/:id', component: TextViewComponent },
       { path: 'text/:id/edit', component: TextEditorComponent },
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },

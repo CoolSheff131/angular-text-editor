@@ -12,6 +12,11 @@ export interface Config {
 export class TextService {
   constructor(private http: HttpClient) {}
 
+  getTextById(id: string): Observable<any> {
+    return this.http.get(`http://localhost:3000/text/${id}`, {
+      responseType: 'text',
+    });
+  }
   getTextByIdToEdit(id: string): Observable<any> {
     return this.http.get(`http://localhost:3000/text/${id}/edit`, {
       responseType: 'text',

@@ -13,13 +13,14 @@
 <div>
     <ul class="texts">
         <li class="texts__item" *ngFor="let text of texts">
-            <a [routerLink]="['/text/', text.id,'edit']">
+            <a [routerLink]="['/text/', text.id]">
                 <mat-icon class="texts__item__icon">description</mat-icon>
                 <h6 class="texts__item__title">
                     {{text.title}}
                 </h6>
             </a>
             <button (click)="deleteText(text.id)">Delete</button>
+            <a [routerLink]="['/text/', text.id,'edit']">Edit</a>
         </li>
     </ul>
 </div>
