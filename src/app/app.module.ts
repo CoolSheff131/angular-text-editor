@@ -20,6 +20,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { TextViewComponent } from './text-view/text-view.component';
+import { TextNotFoundComponent } from './text-not-found/text-not-found.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,12 +29,14 @@ import { TextViewComponent } from './text-view/text-view.component';
     RegisterComponent,
     MainComponent,
     TextViewComponent,
+    TextNotFoundComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
     RouterModule.forRoot([
+      { path: 'textNotFound', component: TextNotFoundComponent },
       { path: 'text/:id', component: TextViewComponent },
       { path: 'text/:id/edit', component: TextEditorComponent },
       { path: 'login', component: LoginComponent },

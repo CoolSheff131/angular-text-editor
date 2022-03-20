@@ -23,7 +23,8 @@ export class TextEditorComponent implements OnInit {
     private webSocketService: WebsocketService,
     private activateRoute: ActivatedRoute,
     private textService: TextService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) {
     this.titleCtrl = new FormControl();
     this.webSocketService.usersInRoom.subscribe((usersInRoom) => {
@@ -34,25 +35,31 @@ export class TextEditorComponent implements OnInit {
       this.activateRoute.paramMap
         .pipe(switchMap((params) => params.getAll('id')))
         .subscribe((id) => {
-          this.textService.getTextByIdToEdit(id).subscribe((data) => {
-            this.webSocketService.leaveRoom();
-            const roomData = JSON.parse(data);
-            this.text = roomData.data;
-            this.titleCtrl.setValue(this.text?.title);
-            console.log(roomData);
-            this.webSocketService.addUsers(roomData.users);
-            this.webSocketService.openWebSocket(
-              (payload: any) => {
-                if (this.text) {
-                  console.log(payload);
+          this.textService.getTextByIdToEdit(id).subscribe(
+            (data) => {
+              this.webSocketService.leaveRoom();
+              const roomData = JSON.parse(data);
+              this.text = roomData.data;
+              this.titleCtrl.setValue(this.text?.title);
+              console.log(roomData);
+              this.webSocketService.addUsers(roomData.users);
+              this.webSocketService.openWebSocket(
+                (payload: any) => {
+                  if (this.text) {
+                    console.log(payload);
 
-                  this.text = payload;
-                }
-              },
-              id,
-              this.userMe
-            );
-          });
+                    this.text = payload;
+                  }
+                },
+                id,
+                this.userMe
+              );
+            },
+            (error) => {
+              console.log(error.status === 404);
+              this.router.navigate(['textNotFound']);
+            }
+          );
         });
     });
   }
