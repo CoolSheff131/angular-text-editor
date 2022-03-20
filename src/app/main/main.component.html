@@ -10,6 +10,8 @@
 </p>
 <button (click)="createText()">Create new Text</button>
 
+<input [(ngModel)]="activateId" type="text">
+<button (click)="activate()">Activate</button>
 <div>
     <ul class="texts">
         <li class="texts__item" *ngFor="let text of texts">

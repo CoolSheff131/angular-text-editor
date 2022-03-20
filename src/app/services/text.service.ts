@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Permission } from '../models/permission.model';
 
 export interface Config {
   text: string;
@@ -36,6 +37,19 @@ export class TextService {
 
   create(title: string, content: string) {
     return this.http.post(`http://localhost:3000/text`, { title, content });
+  }
+
+  share(textId: string, permission: Permission) {
+    return this.http.post(`http://localhost:3000/right-assignment-tokens`, {
+      textId,
+      permission,
+    });
+  }
+
+  activate(id: string) {
+    return this.http.get(
+      `http://localhost:3000/right-assignment-tokens/activate/${id}`
+    );
   }
 
   getMine() {

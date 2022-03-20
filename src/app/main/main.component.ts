@@ -13,6 +13,7 @@ import { UserService } from '../services/user.service';
 export class MainComponent implements OnInit {
   fullname = '';
   texts?: Text[];
+  activateId = '';
 
   constructor(
     private readonly userService: UserService,
@@ -56,6 +57,12 @@ export class MainComponent implements OnInit {
     this.textService.create('test', '').subscribe((data) => {
       console.log(data);
       this.getTexts();
+    });
+  }
+
+  activate() {
+    this.textService.activate(this.activateId).subscribe((data) => {
+      console.log(data);
     });
   }
 }

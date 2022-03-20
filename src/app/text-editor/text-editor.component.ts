@@ -80,6 +80,12 @@ export class TextEditorComponent implements OnInit {
       });
   }
 
+  share() {
+    this.textService.share(this.text.id, 'edit').subscribe((data) => {
+      console.log(data);
+    });
+  }
+
   ngOnDestroy(): void {
     console.log('Destroyed');
     this.webSocketService.leaveRoom();
