@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Permission } from '../models/permission.model';
 import { Text } from '../models/text.model';
 import { AuthService } from '../services/auth.service';
 import { TextService } from '../services/text.service';
@@ -12,6 +13,11 @@ export interface PeriodicElement {
   symbol: string;
 }
 
+interface SharedText {
+  permission: Permission;
+  text: Text;
+}
+
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -19,7 +25,7 @@ export interface PeriodicElement {
 })
 export class MainComponent implements OnInit {
   fullname = '';
-  texts?: Text[];
+
   activateId = '';
   displayedColumns: string[] = [
     'id',
@@ -29,6 +35,7 @@ export class MainComponent implements OnInit {
     'actions',
   ];
   dataSource: Text[] = [];
+  sharedTexts: SharedText[] = [];
 
   constructor(
     private readonly userService: UserService,
@@ -37,7 +44,8 @@ export class MainComponent implements OnInit {
     private readonly textService: TextService
   ) {
     this.getMe();
-    this.getTexts();
+    this.getMineTexts();
+    this.getSharedTexts();
   }
 
   ngOnInit(): void {}
@@ -49,18 +57,24 @@ export class MainComponent implements OnInit {
     });
   }
 
-  getTexts() {
+  getMineTexts() {
     this.textService.getMine().subscribe((data: any) => {
-      this.texts = data;
       this.dataSource = data;
       console.log(data);
+    });
+  }
+
+  getSharedTexts() {
+    this.textService.getShared().subscribe((data: any) => {
+      this.sharedTexts = data;
+      console.log('shared', data);
     });
   }
 
   deleteText(id: string) {
     this.textService.deleteById(id).subscribe((data) => {
       console.log(data);
-      this.getTexts();
+      this.getMineTexts();
     });
   }
 
@@ -72,7 +86,7 @@ export class MainComponent implements OnInit {
   createText() {
     this.textService.create('test', '').subscribe((data) => {
       console.log(data);
-      this.getTexts();
+      this.getMineTexts();
     });
   }
 

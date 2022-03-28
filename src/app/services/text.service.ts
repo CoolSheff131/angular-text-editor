@@ -55,4 +55,7 @@ export class TextService {
   getMine() {
     return this.http.get(`http://localhost:3000/text`);
   }
+  getShared() {
+    return this.http.get(`http://localhost:3000/text/shared`);
+  }
 }

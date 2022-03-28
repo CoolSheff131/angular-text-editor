@@ -10,10 +10,24 @@
   margin-right: 30px;
 }
 
+.section {
+  margin-bottom: 30px;
+}
+
 .container {
   margin: 0 auto;
   width: 100%;
   max-width: 900px;
+}
+
+.justify-between {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.section__header {
+  align-items: center;
 }
 
 a {
