@@ -8,21 +8,28 @@
 
 .header {
   display: flex;
+  justify-content: space-between;
+}
+
+.header__left {
+  display: flex;
+  flex: auto;
+}
+
+.header__inputs {
+  display: flex;
+  flex-direction: column;
 }
 
 .users__wrapper {
   margin-left: 20px;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .users {
   display: flex;
-  padding: 0;
-  margin: 0;
-}
-
-.users__title {
-  padding: 0;
-  margin: 0;
+  flex-direction: row;
 }
 
 .users__item {
