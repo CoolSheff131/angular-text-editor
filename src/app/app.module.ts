@@ -21,6 +21,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { TextViewComponent } from './text-view/text-view.component';
 import { TextNotFoundComponent } from './text-not-found/text-not-found.component';
+import { MatTableModule } from '@angular/material/table';
 @NgModule({
   declarations: [
     AppComponent,
@@ -54,6 +55,7 @@ import { TextNotFoundComponent } from './text-not-found/text-not-found.component
     MatCardModule,
     MatSnackBarModule,
     MatToolbarModule,
+    MatTableModule,
   ],
   providers: [
     {

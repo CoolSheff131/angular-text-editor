@@ -2,25 +2,25 @@
   flex: 1 1 auto;
 }
 
-.texts {
-  display: flex;
-  flex-wrap: wrap;
+.btn {
+  cursor: pointer;
 }
 
-.texts__item {
-  list-style: none;
-  margin-right: 20px;
+.action {
+  margin-right: 30px;
 }
 
-.texts__item__title {
-  font-size: 30px;
-}
-
-.texts__item__icon {
-  font-size: 50px;
+.container {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 900px;
 }
 
 a {
   color: inherit;
   text-decoration: none;
+}
+
+table {
+  width: 100%;
 }

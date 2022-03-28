@@ -5,6 +5,13 @@ import { AuthService } from '../services/auth.service';
 import { TextService } from '../services/text.service';
 import { UserService } from '../services/user.service';
 
+export interface PeriodicElement {
+  name: string;
+  position: number;
+  weight: number;
+  symbol: string;
+}
+
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -14,6 +21,14 @@ export class MainComponent implements OnInit {
   fullname = '';
   texts?: Text[];
   activateId = '';
+  displayedColumns: string[] = [
+    'id',
+    'title',
+    'createdAt',
+    'updatedAt',
+    'actions',
+  ];
+  dataSource: Text[] = [];
 
   constructor(
     private readonly userService: UserService,
@@ -37,7 +52,8 @@ export class MainComponent implements OnInit {
   getTexts() {
     this.textService.getMine().subscribe((data: any) => {
       this.texts = data;
-      console.log(this.texts);
+      this.dataSource = data;
+      console.log(data);
     });
   }
 
