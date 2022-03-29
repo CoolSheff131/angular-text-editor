@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>
+    <mat-icon>group_add</mat-icon> Предоставьте доступ пользователям <mat-icon>settings</mat-icon>
+</h1>
+<div mat-dialog-content>
+    Сгенерировать одноразовую ссылку
+    <button mat-raised-button color="primary" (click)="generateSingleLink()">
+        Сгенерировать
+        <mat-icon>supervised_user_circle</mat-icon>
+    </button>
+    <div>
+        Одноразовые ссылки
+        <ul>
+            <li *ngFor="let singleLink of singleLinks">
+                {{singleLink}}
+            </li>
+        </ul>
+    </div>
+</div>

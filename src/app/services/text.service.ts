@@ -46,6 +46,12 @@ export class TextService {
     });
   }
 
+  getSingleSharedLinks(textId: string) {
+    return this.http.get(
+      `http://localhost:3000/right-assignment-tokens/text/${textId}`
+    );
+  }
+
   activate(id: string) {
     return this.http.get(
       `http://localhost:3000/right-assignment-tokens/activate/${id}`

@@ -7,6 +7,8 @@ import { User } from '../models/user.model';
 import { TextService } from '../services/text.service';
 import { UserService } from '../services/user.service';
 import { WebsocketService } from '../services/websocket.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogShareTextComponent } from '../dialog-share-text/dialog-share-text.component';
 
 @Component({
   selector: 'app-text-editor',
@@ -24,7 +26,8 @@ export class TextEditorComponent implements OnInit {
     private activateRoute: ActivatedRoute,
     private textService: TextService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    public dialog: MatDialog
   ) {
     this.titleCtrl = new FormControl();
     this.webSocketService.usersInRoom.subscribe((usersInRoom) => {
@@ -81,8 +84,10 @@ export class TextEditorComponent implements OnInit {
   }
 
   share() {
-    this.textService.share(this.text.id, 'edit').subscribe((data) => {
-      console.log(data);
+    const dialogRef = this.dialog.open(DialogShareTextComponent, {
+      data: {
+        textId: this.text.id,
+      },
     });
   }
 

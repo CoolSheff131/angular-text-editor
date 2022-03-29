@@ -22,6 +22,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { TextViewComponent } from './text-view/text-view.component';
 import { TextNotFoundComponent } from './text-not-found/text-not-found.component';
 import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule } from '@angular/material/dialog';
+import { DialogShareTextComponent } from './dialog-share-text/dialog-share-text.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,6 +34,7 @@ import { MatTableModule } from '@angular/material/table';
     MainComponent,
     TextViewComponent,
     TextNotFoundComponent,
+    DialogShareTextComponent,
   ],
   imports: [
     BrowserModule,
@@ -56,6 +60,7 @@ import { MatTableModule } from '@angular/material/table';
     MatSnackBarModule,
     MatToolbarModule,
     MatTableModule,
+    MatDialogModule,
   ],
   providers: [
     {
