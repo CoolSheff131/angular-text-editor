@@ -12,6 +12,7 @@
         <ul>
             <li *ngFor="let userPermission of userPermissions">
                 {{userPermission.user.fullname}}
+                {{userPermission.permission}}
                 <button mat-button color="primary" (click)="deleteUserPermission(userPermission.id)">
                     Удалить
                     <mat-icon>delete</mat-icon>
