@@ -8,6 +8,18 @@
         <mat-icon>supervised_user_circle</mat-icon>
     </button>
     <div>
+        Доступен
+        <ul>
+            <li *ngFor="let userPermission of userPermissions">
+                {{userPermission.user.fullname}}
+                <button mat-button color="primary" (click)="deleteUserPermission(userPermission.id)">
+                    Удалить
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </li>
+        </ul>
+    </div>
+    <div>
         Одноразовые ссылки
         <ul>
             <li *ngFor="let singleLink of singleLinks">

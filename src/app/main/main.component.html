@@ -90,13 +90,13 @@
             <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef> Actions </th>
                 <td mat-cell *matCellDef="let element" class="actions">
-                    <a [routerLink]="['/text/', element.id]" class="action">
+                    <a [routerLink]="['/text/', element.text.id]" class="action">
                         <mat-icon>remove_red_eye</mat-icon>
                     </a>
                     <!-- <a (click)="deleteText(element.id)" class="btn action">
                         <mat-icon>delete</mat-icon>
                     </a> -->
-                    <a [routerLink]="['/text/', element.id,'edit']" class="action">
+                    <a [routerLink]="['/text/', element.text.id,'edit']" class="action">
                         <mat-icon>edit</mat-icon>
                     </a>
                 </td>

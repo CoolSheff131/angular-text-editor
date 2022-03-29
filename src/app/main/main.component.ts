@@ -92,7 +92,7 @@ export class MainComponent implements OnInit {
 
   activate() {
     this.textService.activate(this.activateId).subscribe((data) => {
-      console.log(data);
+      this.getSharedTexts();
     });
   }
 }

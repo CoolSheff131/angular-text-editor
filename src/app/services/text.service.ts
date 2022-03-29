@@ -58,6 +58,10 @@ export class TextService {
     );
   }
 
+  getPermissions(textId: string) {
+    return this.http.get(`http://localhost:3000/permissions/text/${textId}`);
+  }
+
   deleteToken(id: string) {
     return this.http.delete(
       `http://localhost:3000/right-assignment-tokens/${id}`
