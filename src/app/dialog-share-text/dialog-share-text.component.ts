@@ -49,7 +49,10 @@ export class DialogShareTextComponent implements OnInit {
   }
 
   deleteUserPermission(idPermission: string) {
-    console.log(idPermission);
+    this.textService.deleteUserPermission(idPermission).subscribe((data) => {
+      console.log('deletedPermission', data);
+      this.getUserPermissions();
+    });
   }
 
   getUserPermissions() {

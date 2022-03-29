@@ -58,6 +58,12 @@ export class TextService {
     );
   }
 
+  deleteUserPermission(idPermission: string) {
+    return this.http.delete(
+      `http://localhost:3000/permissions/${idPermission}`
+    );
+  }
+
   getPermissions(textId: string) {
     return this.http.get(`http://localhost:3000/permissions/text/${textId}`);
   }
