@@ -58,6 +58,12 @@ export class TextService {
     );
   }
 
+  deleteToken(id: string) {
+    return this.http.delete(
+      `http://localhost:3000/right-assignment-tokens/${id}`
+    );
+  }
+
   getMine() {
     return this.http.get(`http://localhost:3000/text`);
   }

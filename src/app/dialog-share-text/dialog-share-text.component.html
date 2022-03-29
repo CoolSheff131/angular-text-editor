@@ -11,7 +11,11 @@
         Одноразовые ссылки
         <ul>
             <li *ngFor="let singleLink of singleLinks">
-                {{singleLink}}
+                http://localhost:3000/right-assignment-tokens/activate/{{singleLink}}
+                <button mat-button color="primary" (click)="deleteSingleLink(singleLink)">
+                    Удалить
+                    <mat-icon>delete</mat-icon>
+                </button>
             </li>
         </ul>
     </div>

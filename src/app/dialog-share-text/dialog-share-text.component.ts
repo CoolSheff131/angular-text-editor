@@ -30,6 +30,15 @@ export class DialogShareTextComponent implements OnInit {
       });
   }
 
+  deleteSingleLink(token: string) {
+    console.log(token);
+
+    this.textService.deleteToken(token).subscribe((data) => {
+      console.log(data);
+      this.getSingleSharedLinks();
+    });
+  }
+
   generateSingleLink() {
     this.textService.share(this.textId, 'edit').subscribe((data) => {
       this.getSingleSharedLinks();
