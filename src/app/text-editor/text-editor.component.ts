@@ -9,6 +9,11 @@ import { UserService } from '../services/user.service';
 import { WebsocketService } from '../services/websocket.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogShareTextComponent } from '../dialog-share-text/dialog-share-text.component';
+import Quill from 'quill';
+import { VideoHandler, ImageHandler, Options } from 'ngx-quill-upload';
+import { ImageService } from '../services/image.service';
+Quill.register('modules/imageHandler', ImageHandler);
+Quill.register('modules/videoHandler', VideoHandler);
 
 @Component({
   selector: 'app-text-editor',
@@ -20,6 +25,7 @@ export class TextEditorComponent implements OnInit {
   userMe!: User;
   text!: Text;
   titleCtrl: FormControl;
+  modules: any;
 
   constructor(
     private webSocketService: WebsocketService,
@@ -27,9 +33,20 @@ export class TextEditorComponent implements OnInit {
     private textService: TextService,
     private userService: UserService,
     private router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private imageService: ImageService
   ) {
     this.titleCtrl = new FormControl();
+
+    this.modules = {
+      imageHandler: {
+        upload: (file) => {
+          return this.imageService.upload(file);
+        },
+        accepts: ['png', 'jpg', 'jpeg', 'jfif'], // Extensions to allow for images (Optional) | Default - ['jpg', 'jpeg', 'png']
+      } as Options,
+    };
+
     this.webSocketService.usersInRoom.subscribe((usersInRoom) => {
       this.usersInRoom = usersInRoom;
     });

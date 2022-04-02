@@ -32,5 +32,6 @@
 </div>
 
 <mat-card class="my-container" *ngIf="text">
-    <quill-editor [(ngModel)]="text.content" (onContentChanged)="ContentChangedHandler($event)"></quill-editor>
+    <quill-editor [(ngModel)]="text.content" [modules]="modules" (onContentChanged)="ContentChangedHandler($event)">
+    </quill-editor>
 </mat-card>
