@@ -93,12 +93,11 @@
                     <a [routerLink]="['/text/', element.text.id]" class="action">
                         <mat-icon>remove_red_eye</mat-icon>
                     </a>
-                    <!-- <a (click)="deleteText(element.id)" class="btn action">
-                        <mat-icon>delete</mat-icon>
-                    </a> -->
-                    <a [routerLink]="['/text/', element.text.id,'edit']" class="action">
-                        <mat-icon>edit</mat-icon>
-                    </a>
+                    <ng-template [ngIf]="element.permission == 'edit'">
+                        <a [routerLink]="['/text/', element.text.id,'edit']" class="action">
+                            <mat-icon>edit</mat-icon>
+                        </a>
+                    </ng-template>
                 </td>
             </ng-container>
 
