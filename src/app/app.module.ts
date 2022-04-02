@@ -24,6 +24,7 @@ import { TextNotFoundComponent } from './text-not-found/text-not-found.component
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DialogShareTextComponent } from './dialog-share-text/dialog-share-text.component';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { DialogShareTextComponent } from './dialog-share-text/dialog-share-text.
     MatToolbarModule,
     MatTableModule,
     MatDialogModule,
+    MatSelectModule,
   ],
   providers: [
     {

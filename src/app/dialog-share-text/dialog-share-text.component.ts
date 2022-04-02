@@ -8,6 +8,11 @@ export interface DialogData {
   textId: string;
 }
 
+export interface Token {
+  id: string;
+  permission: Permission;
+}
+
 export interface UserPermission {
   id: string;
   permission: Permission;
@@ -20,8 +25,11 @@ export interface UserPermission {
 })
 export class DialogShareTextComponent implements OnInit {
   textId: string;
-  singleLinks: string[] = [];
+  tokens: Token[] = [];
   userPermissions: UserPermission[] = [];
+  permissions: Permission[] = ['read', 'edit'];
+  selectedPermission: Permission;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private textService: TextService
@@ -29,13 +37,16 @@ export class DialogShareTextComponent implements OnInit {
     this.textId = data.textId;
     this.getSingleSharedLinks();
     this.getUserPermissions();
+    this.selectedPermission = this.permissions[0];
   }
 
   getSingleSharedLinks() {
     this.textService
       .getSingleSharedLinks(this.textId)
       .subscribe((data: any) => {
-        this.singleLinks = data;
+        console.log(data);
+
+        this.tokens = data;
       });
   }
 
@@ -63,9 +74,11 @@ export class DialogShareTextComponent implements OnInit {
   }
 
   generateSingleLink() {
-    this.textService.share(this.textId, 'edit').subscribe((data) => {
-      this.getSingleSharedLinks();
-    });
+    this.textService
+      .share(this.textId, this.selectedPermission)
+      .subscribe((data) => {
+        this.getSingleSharedLinks();
+      });
   }
 
   ngOnInit(): void {}

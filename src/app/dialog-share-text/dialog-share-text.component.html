@@ -3,10 +3,20 @@
 </h1>
 <div mat-dialog-content>
     Сгенерировать одноразовую ссылку
-    <button mat-raised-button color="primary" (click)="generateSingleLink()">
-        Сгенерировать
-        <mat-icon>supervised_user_circle</mat-icon>
-    </button>
+    <div>
+        <mat-form-field appearance="fill">
+            <mat-label>Выберите тип разрешения</mat-label>
+            <mat-select [(value)]="selectedPermission">
+                <mat-option *ngFor="let permission of permissions" [value]="permission">
+                    {{permission}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="generateSingleLink()">
+            Сгенерировать
+            <mat-icon>supervised_user_circle</mat-icon>
+        </button>
+    </div>
     <div>
         Доступен
         <ul>
@@ -23,9 +33,10 @@
     <div>
         Одноразовые ссылки
         <ul>
-            <li *ngFor="let singleLink of singleLinks">
-                http://localhost:3000/right-assignment-tokens/activate/{{singleLink}}
-                <button mat-button color="primary" (click)="deleteSingleLink(singleLink)">
+            <li *ngFor="let token of tokens">
+                <b>{{token.permission}}</b>
+                http://localhost:3000/right-assignment-tokens/activate/{{token.id}}
+                <button mat-button color="primary" (click)="deleteSingleLink(token.id)">
                     Удалить
                     <mat-icon>delete</mat-icon>
                 </button>
