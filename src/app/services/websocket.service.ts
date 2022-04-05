@@ -19,31 +19,23 @@ export class WebsocketService {
   user?: User;
   constructor() {
     this._socket = io('http://localhost:3000');
-    this._socket.on('joinedRoom', (joinedUser: User) => {
-      this._usersInRoom.next([...this._usersInRoom.getValue(), joinedUser]);
+    this._socket.on('joinedRoom', (joinedUser: User[]) => {
+      this._usersInRoom.next(joinedUser);
     });
 
-    this._socket.on('leftRoom', (leftUser: User) => {
-      let usersInRoom = this._usersInRoom.getValue();
-      usersInRoom = usersInRoom.filter(
-        (userInRoom) => userInRoom.id !== leftUser.id
-      );
-      this._usersInRoom.next(usersInRoom);
+    this._socket.on('leftRoom', (leftUser: User[]) => {
+      this._usersInRoom.next(leftUser);
     });
   }
 
   public openWebSocket(callback: any, textId: string, user: User) {
     this.user = user;
     this.textId = textId;
-    console.log('textId', textId);
-
     this._socket.emit('joinRoom', { textId, user });
     this._socket.on('msgFromServer', callback);
   }
 
   public sendMessage(text: any) {
-    console.log(text);
-
     this._socket.emit('msgToServer', { textId: this.textId, text });
   }
 
@@ -52,10 +44,7 @@ export class WebsocketService {
   }
 
   public leaveRoom() {
-    console.log('leave');
     if (this.textId && this.user) {
-      console.log('left');
-
       this._socket.emit('leaveRoom', { textId: this.textId, user: this.user });
     }
   }
