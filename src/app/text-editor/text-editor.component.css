@@ -41,9 +41,20 @@
 .users {
   display: flex;
   flex-direction: row;
-  max-width: 800px;
-  overflow-x: auto;
-  overflow-y: hidden;
+}
+
+.userFullname{
+  margin-left: 10px;
+}
+
+.usersMenu{
+  padding: 5px 8px;
+}
+
+.userMenu__item{
+  display: flex;
+  align-items: end;
+  margin-bottom: 5px;
 }
 
 .users__item {

@@ -14,9 +14,6 @@
                 </button>
             </div>
         </div>
-
-
-        <h6>USERS</h6>
         <div class="users__wrapper">
             <ul class="users">
                 <ng-template [ngIf]="usersInRoom!.length < 4" [ngIfElse]="userCount">
@@ -26,11 +23,18 @@
                 </ng-template>
 
                 <ng-template #userCount>
-                    <button mat-button [matMenuTriggerFor]="menu">{{usersInRoom!.length}}</button>
+                    <button mat-icon-button [matMenuTriggerFor]="menu">{{usersInRoom!.length}} <mat-icon>
+                            supervisor_account</mat-icon></button>
                     <mat-menu #menu="matMenu">
-                        <mat-icon *ngFor="let user of usersInRoom" class="users__item header__avatar"
-                            [matTooltip]="user.fullname">account_circle
-                        </mat-icon>
+                        <div class="usersMenu">
+                            <div *ngFor="let user of usersInRoom" class="userMenu__item">
+                                <mat-icon class="header__avatar">account_circle
+                                </mat-icon>
+                                <span class="userFullname">
+                                    {{user.fullname}}
+                                </span>
+                            </div>
+                        </div>
                     </mat-menu>
                 </ng-template>
             </ul>
