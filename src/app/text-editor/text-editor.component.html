@@ -1,12 +1,12 @@
 <div class="header">
     <div class="header__left">
         <div>
-            <a [routerLink]="['']">
-                <mat-icon>arrow_back</mat-icon>
-            </a>
+            <button class="btn__icon" mat-icon-button matTooltip="Выйти в главное меню" routerLink="">
+                <mat-icon class="icon__back">arrow_back</mat-icon>
+            </button>
         </div>
         <div class="header__inputs">
-            <input matInput [formControl]="titleCtrl" required>
+            <input class="text__title" matInput [formControl]="titleCtrl" required>
             <div class="buttons">
                 <button class="button" (click)="saveChanges()">
                     SAVE

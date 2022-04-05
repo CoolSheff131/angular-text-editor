@@ -6,9 +6,26 @@
   margin: 0 auto;
 }
 
+.btn__icon{
+  text-align: left;
+}
+
+.text__title{
+  border: 1px solid transparent;
+  font-size: 15px;
+}
+
+.text__title:hover{
+  border: 1px solid grey;
+}
+.icon__back{
+  font-size: 40px;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
+  padding: 10px 12px;
 }
 
 .header__left {
@@ -18,8 +35,7 @@
 
 .header__right {
   display: flex;
-  justify-content: center;
-  min-width: 240px;
+  align-items: center;
 }
 
 .header__avatar{
