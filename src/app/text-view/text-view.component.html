@@ -1,11 +1,18 @@
-<div>
-    <a [routerLink]="['']">
-        <mat-icon>arrow_back</mat-icon>
-    </a>
+<div class="header">
+    <div class="header__left">
+        <div>
+            <a [routerLink]="['']">
+                <mat-icon>arrow_back</mat-icon>
+            </a>
+        </div>
+        <div class="header__inputs">
+            <h1>{{title}}</h1>
+        </div>
+    </div>
+    <div class="header__right">
+
+    </div>
 </div>
-<div>
-    <h1>{{title}}</h1>
-</div>
-<div>
-    {{text}}
-</div>
+<mat-card class="my-container" *ngIf="text">
+    <div [innerHTML]="text"></div>
+</mat-card>
