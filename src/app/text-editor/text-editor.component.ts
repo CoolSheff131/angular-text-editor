@@ -9,9 +9,14 @@ import { UserService } from '../services/user.service';
 import { WebsocketService } from '../services/websocket.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogShareTextComponent } from '../dialog-share-text/dialog-share-text.component';
-import Quill from 'quill';
+import * as QuillNamespace from 'quill';
+let Quill: any = QuillNamespace;
+
 import { VideoHandler, ImageHandler, Options } from 'ngx-quill-upload';
 import { ImageService } from '../services/image.service';
+import ImageResize from 'quill-image-resize-module';
+
+Quill.register('modules/imageResize', ImageResize);
 Quill.register('modules/imageHandler', ImageHandler);
 Quill.register('modules/videoHandler', VideoHandler);
 
@@ -46,6 +51,7 @@ export class TextEditorComponent implements OnInit {
         },
         accepts: ['png', 'jpg', 'jpeg', 'jfif'], // Extensions to allow for images (Optional) | Default - ['jpg', 'jpeg', 'png']
       } as Options,
+      imageResize: true,
     };
 
     this.webSocketService.usersInRoom.subscribe((usersInRoom) => {
@@ -111,6 +117,8 @@ export class TextEditorComponent implements OnInit {
   }
 
   ContentChangedHandler(event: any) {
+    console.log(event);
+
     if (event.source === 'user' && this.text.content) {
       this.webSocketService.sendMessage(this.text);
     }
