@@ -25,7 +25,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DialogShareTextComponent } from './dialog-share-text/dialog-share-text.component';
 import { MatSelectModule } from '@angular/material/select';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
 @NgModule({
   declarations: [
     AppComponent,
@@ -63,6 +64,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatTableModule,
     MatDialogModule,
     MatSelectModule,
+    MatTooltipModule,
+    MatMenuModule,
   ],
   providers: [
     {

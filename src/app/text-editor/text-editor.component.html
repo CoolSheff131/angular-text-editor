@@ -18,8 +18,21 @@
 
         <h6>USERS</h6>
         <div class="users__wrapper">
-            <ul class="users" *ngFor="let user of usersInRoom">
-                <li class="users__item">{{user.fullname}}</li>
+            <ul class="users">
+                <ng-template [ngIf]="usersInRoom!.length < 4" [ngIfElse]="userCount">
+                    <mat-icon *ngFor="let user of usersInRoom" class="users__item header__avatar"
+                        [matTooltip]="user.fullname">account_circle
+                    </mat-icon>
+                </ng-template>
+
+                <ng-template #userCount>
+                    <button mat-button [matMenuTriggerFor]="menu">{{usersInRoom!.length}}</button>
+                    <mat-menu #menu="matMenu">
+                        <mat-icon *ngFor="let user of usersInRoom" class="users__item header__avatar"
+                            [matTooltip]="user.fullname">account_circle
+                        </mat-icon>
+                    </mat-menu>
+                </ng-template>
             </ul>
         </div>
     </div>
@@ -28,6 +41,9 @@
             SHARE SETTINGS
             <mat-icon>supervised_user_circle</mat-icon>
         </button>
+        <mat-icon class="header__avatar">account_circle</mat-icon>
+        <!-- <img class="header__right__items" mat-card-avatar
+            src="https://material.angular.io/assets/img/examples/shiba1.jpg" alt="Photo of a Shiba Inu"> -->
     </div>
 </div>
 

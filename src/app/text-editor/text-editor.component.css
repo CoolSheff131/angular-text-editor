@@ -16,6 +16,17 @@
   flex: auto;
 }
 
+.header__right {
+  display: flex;
+  justify-content: center;
+  min-width: 240px;
+}
+
+.header__avatar{
+  font-size: 30px;
+}
+
+
 .header__inputs {
   display: flex;
   flex-direction: column;
@@ -30,6 +41,9 @@
 .users {
   display: flex;
   flex-direction: row;
+  max-width: 800px;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .users__item {
