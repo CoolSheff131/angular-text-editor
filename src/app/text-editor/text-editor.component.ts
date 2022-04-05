@@ -31,6 +31,7 @@ export class TextEditorComponent implements OnInit {
   text!: Text;
   titleCtrl: FormControl;
   modules: any;
+  timeout: any = null;
 
   constructor(
     private webSocketService: WebsocketService,
@@ -117,10 +118,11 @@ export class TextEditorComponent implements OnInit {
   }
 
   ContentChangedHandler(event: any) {
-    console.log(event);
-
+    clearTimeout(this.timeout);
     if (event.source === 'user' && this.text.content) {
-      this.webSocketService.sendMessage(this.text);
+      this.timeout = setTimeout(() => {
+        this.webSocketService.sendMessage(this.text);
+      }, 1000);
     }
   }
 }
