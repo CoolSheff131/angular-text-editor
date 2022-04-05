@@ -50,6 +50,45 @@
             src="https://material.angular.io/assets/img/examples/shiba1.jpg" alt="Photo of a Shiba Inu"> -->
     </div>
 </div>
+<div id="toolbar">
+    <span class="ql-formats">
+        <select class="ql-font">
+            <option selected></option>
+            <option value="serif"></option>
+            <option value="monospace"></option>
+        </select>
+        <select class="ql-size">
+            <option value="small"></option>
+            <option selected></option>
+            <option value="large"></option>
+            <option value="huge"></option>
+        </select>
+    </span>
+    <span class="ql-formats">
+        <button class="ql-bold"></button>
+        <button class="ql-italic"></button>
+        <button class="ql-underline"></button>
+        <button class="ql-strike"></button>
+    </span>
+    <span class="ql-formats">
+        <select class="ql-color"></select>
+        <select class="ql-background"></select>
+    </span>
+    <span class="ql-formats">
+        <button class="ql-link"></button>
+        <button class="ql-image"></button>
+    </span>
+    <span class="ql-formats">
+        <button class="ql-align" value=""></button>
+        <button class="ql-align" value="center"></button>
+        <button class="ql-align" value="right"></button>
+        <button class="ql-align" value="justify"></button>
+    </span>
+    <span class="ql-formats">
+        <button class="ql-list" value="ordered"></button>
+        <button class="ql-list" value="bullet"></button>
+    </span>
+</div>
 
 <mat-card class="my-container" *ngIf="text">
     <quill-editor [(ngModel)]="text.content" [modules]="modules" (onContentChanged)="ContentChangedHandler($event)">

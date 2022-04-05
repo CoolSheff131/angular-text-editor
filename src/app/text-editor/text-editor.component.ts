@@ -39,6 +39,7 @@ export class TextEditorComponent implements OnInit {
     this.titleCtrl = new FormControl();
 
     this.modules = {
+      toolbar: '#toolbar',
       imageHandler: {
         upload: (file) => {
           return this.imageService.upload(file);
@@ -61,13 +62,10 @@ export class TextEditorComponent implements OnInit {
               const roomData = JSON.parse(data);
               this.text = roomData.data;
               this.titleCtrl.setValue(this.text?.title);
-              console.log(roomData);
               this.webSocketService.addUsers(roomData.users);
               this.webSocketService.openWebSocket(
                 (payload: any) => {
                   if (this.text) {
-                    console.log(payload);
-
                     this.text = payload;
                   }
                 },
@@ -76,7 +74,6 @@ export class TextEditorComponent implements OnInit {
               );
             },
             (error) => {
-              console.log(error.status === 404);
               this.router.navigate(['textNotFound']);
             }
           );
