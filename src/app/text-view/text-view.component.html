@@ -13,6 +13,13 @@
 
     </div>
 </div>
+<span *ngIf="isLoadingText">
+    <mat-spinner color="warn"></mat-spinner>
+</span>
+<span *ngIf="isErrorText">
+    <mat-icon>cloud_off</mat-icon>
+</span>
 <mat-card class="my-container" *ngIf="text">
+
     <div [innerHTML]="text"></div>
 </mat-card>

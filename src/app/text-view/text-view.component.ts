@@ -9,6 +9,8 @@ import { TextService } from '../services/text.service';
   styleUrls: ['./text-view.component.css'],
 })
 export class TextViewComponent implements OnInit {
+  isLoadingText = true;
+  isErrorText = false;
   text = '';
   title = '';
   constructor(
@@ -18,10 +20,17 @@ export class TextViewComponent implements OnInit {
     activatedRoute.paramMap
       .pipe(switchMap((params) => params.getAll('id')))
       .subscribe((id) => {
-        textService.getTextById(id).subscribe((text) => {
-          const data = JSON.parse(text);
-          this.text = data.content;
-          this.title = data.title;
+        textService.getTextById(id).subscribe({
+          next: (text) => {
+            const data = JSON.parse(text);
+            this.text = data.content;
+            this.title = data.title;
+            this.isLoadingText = false;
+          },
+          error: (error) => {
+            this.isLoadingText = false;
+            this.isErrorText = true;
+          },
         });
       });
   }

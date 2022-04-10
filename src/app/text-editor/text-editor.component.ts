@@ -32,6 +32,10 @@ export class TextEditorComponent implements OnInit {
   titleCtrl: FormControl;
   modules: any;
   timeout: any = null;
+  isLoadingText = true;
+  isErrorText = false;
+  isLoadingMe = true;
+  isErrorMe = false;
 
   constructor(
     private webSocketService: WebsocketService,
@@ -58,33 +62,44 @@ export class TextEditorComponent implements OnInit {
     this.webSocketService.usersInRoom.subscribe((usersInRoom) => {
       this.usersInRoom = usersInRoom;
     });
-    this.userService.getMe().subscribe((userData) => {
-      this.userMe = userData;
-      this.activateRoute.paramMap
-        .pipe(switchMap((params) => params.getAll('id')))
-        .subscribe((id) => {
-          this.textService.getTextByIdToEdit(id).subscribe(
-            (data) => {
-              this.webSocketService.leaveRoom();
-              const roomData = JSON.parse(data);
-              this.text = roomData.data;
-              this.titleCtrl.setValue(this.text?.title);
-              this.webSocketService.addUsers(roomData.users);
-              this.webSocketService.openWebSocket(
-                (payload: any) => {
-                  if (this.text) {
-                    this.text = payload;
-                  }
-                },
-                id,
-                this.userMe
-              );
-            },
-            (error) => {
-              this.router.navigate(['textNotFound']);
-            }
-          );
-        });
+    this.userService.getMe().subscribe({
+      next: (userData) => {
+        this.isLoadingMe = false;
+        this.userMe = userData;
+
+        this.activateRoute.paramMap
+          .pipe(switchMap((params) => params.getAll('id')))
+          .subscribe((id) => {
+            this.textService.getTextByIdToEdit(id).subscribe({
+              next: (data) => {
+                this.isLoadingText = false;
+                this.webSocketService.leaveRoom();
+                const roomData = JSON.parse(data);
+                this.text = roomData.data;
+                this.titleCtrl.setValue(this.text?.title);
+                this.webSocketService.addUsers(roomData.users);
+                this.webSocketService.openWebSocket(
+                  (payload: any) => {
+                    if (this.text) {
+                      this.text = payload;
+                    }
+                  },
+                  id,
+                  this.userMe
+                );
+              },
+              error: (error) => {
+                this.isLoadingText = false;
+                this.isErrorText = true;
+                this.router.navigate(['textNotFound']);
+              },
+            });
+          });
+      },
+      error: (error) => {
+        this.isErrorMe = true;
+        this.isLoadingMe = false;
+      },
     });
   }
 

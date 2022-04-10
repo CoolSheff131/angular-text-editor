@@ -10,6 +10,12 @@
   text-align: left;
 }
 
+.spinner__wrapper{
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+}
+
 .text__title{
   border: 1px solid transparent;
   font-size: 15px;
