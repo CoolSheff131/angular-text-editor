@@ -27,6 +27,7 @@ import { DialogShareTextComponent } from './dialog-share-text/dialog-share-text.
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @NgModule({
   declarations: [
     AppComponent,
@@ -66,6 +67,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatSelectModule,
     MatTooltipModule,
     MatMenuModule,
+    MatProgressSpinnerModule,
   ],
   providers: [
     {

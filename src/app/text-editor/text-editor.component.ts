@@ -122,7 +122,7 @@ export class TextEditorComponent implements OnInit {
     if (event.source === 'user' && this.text.content) {
       this.timeout = setTimeout(() => {
         this.webSocketService.sendMessage(this.text);
-      }, 1000);
+      }, 100);
     }
   }
 }

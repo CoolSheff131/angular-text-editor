@@ -26,6 +26,12 @@
   margin-bottom: 5px;
 }
 
+.spinner__wrapper{
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+}
+
 .section__header {
   align-items: center;
 }

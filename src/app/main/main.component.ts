@@ -25,7 +25,6 @@ interface SharedText {
 })
 export class MainComponent implements OnInit {
   fullname = '';
-
   activateId = '';
   displayedColumns: string[] = [
     'id',
@@ -36,6 +35,8 @@ export class MainComponent implements OnInit {
   ];
   dataSource: Text[] = [];
   sharedTexts: SharedText[] = [];
+  isLoadingMineTexts = true;
+  isLoadingSharedTexts = true;
 
   constructor(
     private readonly userService: UserService,
@@ -60,20 +61,20 @@ export class MainComponent implements OnInit {
   getMineTexts() {
     this.textService.getMine().subscribe((data: any) => {
       this.dataSource = data;
-      console.log(data);
+      this.isLoadingMineTexts = false;
+      this.isLoadingSharedTexts = false;
     });
   }
 
   getSharedTexts() {
     this.textService.getShared().subscribe((data: any) => {
       this.sharedTexts = data;
-      console.log('shared', data);
+      this.isLoadingSharedTexts = false;
     });
   }
 
   deleteText(id: string) {
     this.textService.deleteById(id).subscribe((data) => {
-      console.log(data);
       this.getMineTexts();
     });
   }
@@ -85,7 +86,6 @@ export class MainComponent implements OnInit {
 
   createText() {
     this.textService.create('test', '').subscribe((data) => {
-      console.log(data);
       this.getMineTexts();
     });
   }
