@@ -136,10 +136,22 @@ export class MainComponent implements OnInit {
   activate() {
     this.textService.activate(this.activateId).subscribe({
       next: (data) => {
+        console.log(data);
+
         this.openSnackBar('Другой текст найден');
         this.getSharedTexts();
       },
       error: (error) => {
+        console.log(error);
+        if (error.status === 406) {
+          return this.openSnackBar('Вы владец текста!');
+        }
+        if (error.status === 404) {
+          return this.openSnackBar('Токена не существует!');
+        }
+        if (error.status === 403) {
+          return this.openSnackBar('У вас уже есть доступ к тексту!');
+        }
         this.openSnackBar('Ошибка активации');
       },
     });
