@@ -2,7 +2,7 @@
     <mat-icon>group_add</mat-icon> Предоставьте доступ пользователям <mat-icon>settings</mat-icon>
 </h1>
 <div mat-dialog-content>
-    Сгенерировать одноразовую ссылку
+    <h3>Сгенерировать одноразовую ссылку</h3>
     <div>
         <mat-form-field appearance="fill">
             <mat-label>Выберите тип разрешения</mat-label>
@@ -14,33 +14,67 @@
         </mat-form-field>
         <button mat-raised-button color="primary" (click)="generateSingleLink()">
             Сгенерировать
-            <mat-icon>supervised_user_circle</mat-icon>
+            <mat-icon>link</mat-icon>
         </button>
     </div>
     <div>
-        Доступен
-        <ul>
-            <li *ngFor="let userPermission of userPermissions">
-                {{userPermission.user.fullname}}
-                {{userPermission.permission}}
-                <button mat-button color="primary" (click)="deleteUserPermission(userPermission.id)">
-                    Удалить
-                    <mat-icon>delete</mat-icon>
-                </button>
-            </li>
-        </ul>
+        <h3>Одноразовые ссылки</h3>
+        <table *ngIf="!isLoadingLinks && !isErrorLinks" mat-table [dataSource]="tokens">
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef> id. </th>
+                <td mat-cell *matCellDef="let token">
+                    http://localhost:3000/right-assignment-tokens/activate/{{token.id}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="permission">
+                <th mat-header-cell *matHeaderCellDef> permission </th>
+                <td mat-cell *matCellDef="let token"> {{token.permission}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> Actions </th>
+                <td mat-cell *matCellDef="let element" class="actions">
+                    <a (click)="copySignleLink(element.id)" class="action" mat-button>
+                        <mat-icon>file_copy</mat-icon>
+                    </a>
+                    <a (click)="deleteSingleLink(element.id)" mat-button class="btn action">
+                        <mat-icon>delete</mat-icon>
+                    </a>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsToken"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsToken;"></tr>
+        </table>
     </div>
     <div>
-        Одноразовые ссылки
-        <ul>
-            <li *ngFor="let token of tokens">
-                <b>{{token.permission}}</b>
-                http://localhost:3000/right-assignment-tokens/activate/{{token.id}}
-                <button mat-button color="primary" (click)="deleteSingleLink(token.id)">
-                    Удалить
-                    <mat-icon>delete</mat-icon>
-                </button>
-            </li>
-        </ul>
+        <h3>Доступен</h3>
+        <table *ngIf="!isLoadingUserPermission && !isErrorUserPermission" mat-table [dataSource]="userPermissions">
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef> id. </th>
+                <td mat-cell *matCellDef="let token">{{token.id}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="user">
+                <th mat-header-cell *matHeaderCellDef> user </th>
+                <td mat-cell *matCellDef="let token"> {{token.user.fullname}} </td>
+            </ng-container>
+            <ng-container matColumnDef="permission">
+                <th mat-header-cell *matHeaderCellDef> permission </th>
+                <td mat-cell *matCellDef="let token"> {{token.permission}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> Actions </th>
+                <td mat-cell *matCellDef="let element" class="actions">
+                    <a (click)="deleteUserPermission(element.id)" mat-button class="btn action">
+                        <mat-icon>delete</mat-icon>
+                    </a>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsUser"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsUser;"></tr>
+        </table>
     </div>
 </div>

@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Permission } from '../models/permission.model';
 import { User } from '../models/user.model';
 import { TextService } from '../services/text.service';
@@ -28,11 +29,20 @@ export class DialogShareTextComponent implements OnInit {
   tokens: Token[] = [];
   userPermissions: UserPermission[] = [];
   permissions: Permission[] = ['read', 'edit'];
+
+  isErrorLinks = false;
+  isLoadingLinks = true;
+  isErrorUserPermission = false;
+  isLoadingUserPermission = true;
+  displayedColumnsToken: string[] = ['id', 'permission', 'actions'];
+  displayedColumnsUser: string[] = ['id', 'permission', 'user', 'actions'];
+
   selectedPermission: Permission;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private textService: TextService
+    private textService: TextService,
+    private _snackBar: MatSnackBar
   ) {
     this.textId = data.textId;
     this.getSingleSharedLinks();
@@ -44,10 +54,16 @@ export class DialogShareTextComponent implements OnInit {
     this.textService
       .getSingleSharedLinks(this.textId)
       .subscribe((data: any) => {
-        console.log(data);
-
         this.tokens = data;
+        this.isLoadingLinks = false;
       });
+  }
+
+  copySignleLink(token: string) {
+    navigator.clipboard.writeText(
+      `http://localhost:3000/right-assignment-tokens/activate/${token}`
+    );
+    this._snackBar.open('Скопировано!');
   }
 
   deleteSingleLink(token: string) {
@@ -68,7 +84,7 @@ export class DialogShareTextComponent implements OnInit {
 
   getUserPermissions() {
     this.textService.getPermissions(this.textId).subscribe((data: any) => {
-      console.log(data);
+      this.isLoadingUserPermission = false;
       this.userPermissions = data;
     });
   }
