@@ -63,21 +63,17 @@ export class DialogShareTextComponent implements OnInit {
     navigator.clipboard.writeText(
       `http://localhost:3000/right-assignment-tokens/activate/${token}`
     );
-    this._snackBar.open('Скопировано!');
+    this._snackBar.open('Скопировано!', 'ok', { duration: 2000 });
   }
 
   deleteSingleLink(token: string) {
-    console.log(token);
-
     this.textService.deleteToken(token).subscribe((data) => {
-      console.log(data);
       this.getSingleSharedLinks();
     });
   }
 
   deleteUserPermission(idPermission: string) {
     this.textService.deleteUserPermission(idPermission).subscribe((data) => {
-      console.log('deletedPermission', data);
       this.getUserPermissions();
     });
   }

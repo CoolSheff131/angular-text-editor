@@ -87,7 +87,7 @@ export class MainComponent implements OnInit {
   }
 
   openSnackBar(message: string) {
-    this._snackBar.open(message);
+    this._snackBar.open(message, 'ok', { duration: 2000 });
   }
 
   getSharedTexts() {
