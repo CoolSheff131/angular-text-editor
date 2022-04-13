@@ -1,11 +1,19 @@
-<mat-toolbar color="primary" class="toolbar">
-    <span *ngIf="isLoadingMe">
-        <mat-spinner color="warn" diameter="40"></mat-spinner>
-    </span>
-    <span *ngIf="isErrorMe">
-        <mat-icon>cloud_off</mat-icon>
-    </span>
-    <span *ngIf="!isLoadingMe && !isErrorMe">{{Me!.fullname}}</span>
+<mat-toolbar class="toolbar">
+    <div class="toolbar__item">
+        <span *ngIf="isLoadingMe">
+            <mat-spinner color="warn" diameter="40"></mat-spinner>
+        </span>
+        <span *ngIf="isErrorMe">
+            <mat-icon>cloud_off</mat-icon>
+        </span>
+        <span *ngIf="!isLoadingMe && !isErrorMe">{{Me!.fullname}}</span>
+    </div>
+
+    <div class="toolbar__item search">
+        <mat-icon class="search__icon">search</mat-icon>
+        <input class="search__field" placeholder="Поиск">
+    </div>
+
     <span class="example-spacer"></span>
     <button (click)="signOut()" mat-icon-button class="example-icon favorite-icon"
         aria-label="Example icon-button with heart icon">
