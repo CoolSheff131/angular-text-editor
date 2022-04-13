@@ -28,6 +28,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CreateTextDialogComponent } from './create-text-dialog/create-text-dialog.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,6 +39,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     TextViewComponent,
     TextNotFoundComponent,
     DialogShareTextComponent,
+    CreateTextDialogComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { CreateTextDialogComponent } from '../create-text-dialog/create-text-dialog.component';
 import { Permission } from '../models/permission.model';
 import { Text } from '../models/text.model';
 import { User } from '../models/user.model';
@@ -50,7 +52,8 @@ export class MainComponent implements OnInit {
     private readonly authService: AuthService,
     private readonly router: Router,
     private readonly textService: TextService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    public dialog: MatDialog
   ) {
     this.getMe();
     this.getMineTexts();
@@ -122,14 +125,22 @@ export class MainComponent implements OnInit {
   }
 
   createText() {
-    this.textService.create('test', '').subscribe({
-      next: (data) => {
-        this.openSnackBar('Текст создан');
-        this.getMineTexts();
-      },
-      error: (error) => {
-        this.openSnackBar('Ошибка создания текста');
-      },
+    const dialogRef = this.dialog.open(CreateTextDialogComponent, {
+      width: '450px',
+      data: '',
+    });
+    dialogRef.afterClosed().subscribe((name) => {
+      if (name) {
+        this.textService.create(name, '').subscribe({
+          next: (data) => {
+            this.openSnackBar('Текст создан');
+            this.getMineTexts();
+          },
+          error: (error) => {
+            this.openSnackBar('Ошибка создания текста');
+          },
+        });
+      }
     });
   }
 
