@@ -19,7 +19,6 @@ export class ImageService {
         //if (file.size < 1000000) {
         const uploadData = new FormData();
         uploadData.append('file', file, file.name);
-        console.log('sending');
         this.http
           .post('http://localhost:3000/text/upload', uploadData)
           .toPromise()

@@ -15,6 +15,7 @@ let Quill: any = QuillNamespace;
 import { VideoHandler, ImageHandler, Options } from 'ngx-quill-upload';
 import { ImageService } from '../services/image.service';
 import ImageResize from 'quill-image-resize-module';
+import html2canvas from 'html2canvas';
 
 Quill.register('modules/imageResize', ImageResize);
 Quill.register('modules/imageHandler', ImageHandler);
@@ -107,16 +108,40 @@ export class TextEditorComponent implements OnInit {
     window.onbeforeunload = () => this.ngOnDestroy();
   }
 
-  saveChanges() {
+  async saveChanges() {
     this.textService
       .updateTextById(
         this.text.id,
         this.titleCtrl.value,
         this.text.content || ''
       )
-      .subscribe((data) => {
-        console.log(data);
+      .subscribe(async (data) => {
+        const previewImg = await this.screenshot();
+
+        this.textService
+          .updateTextPreviewById(this.text.id, previewImg)
+          .subscribe((d) => {
+            console.log('d', d);
+          });
+        console.log('data', data);
       });
+  }
+
+  async screenshot() {
+    let html = document.getElementById('textContainer');
+
+    const canvas = await html2canvas(html!, {
+      allowTaint: false,
+      useCORS: true,
+    });
+    document.getElementById('DDDD')?.appendChild(canvas);
+
+    return new Promise<File>((resolve, reject) => {
+      canvas.toBlob((blob) => {
+        var file = new File([blob!], 'name');
+        resolve(file);
+      }, 'image/png');
+    });
   }
 
   share() {
