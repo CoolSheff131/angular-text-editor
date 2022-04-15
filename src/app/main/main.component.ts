@@ -10,14 +10,7 @@ import { AuthService } from '../services/auth.service';
 import { TextService } from '../services/text.service';
 import { UserService } from '../services/user.service';
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-
-interface SharedText {
+export interface SharedText {
   permission: Permission;
   text: Text;
 }
@@ -34,11 +27,27 @@ export class MainComponent implements OnInit {
   displayedColumns: string[] = [
     'id',
     'title',
+    'user',
     'createdAt',
     'updatedAt',
     'actions',
   ];
-  dataSource: Text[] = [];
+  month = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
+  dataSource: SharedText[] = [];
   sharedTexts: SharedText[] = [];
   isLoadingMe = true;
   isLoadingMineTexts = true;
@@ -78,28 +87,14 @@ export class MainComponent implements OnInit {
   }
 
   getMineTexts() {
-    const month = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
     this.textService.getMine().subscribe({
-      next: (data: Text[]) => {
+      next: (data: SharedText[]) => {
         this.dataSource = data;
         data.forEach((text) => {
-          const date = new Date(text.updatedAt);
+          const date = new Date(text.text.updatedAt);
 
-          text.updatedAt = `${date.getDay()} ${
-            month[date.getMonth()]
+          text.text.updatedAt = `${date.getDay()} ${
+            this.month[date.getMonth()]
           } ${date.getFullYear()}г.`;
         });
         console.log(data);
@@ -120,10 +115,8 @@ export class MainComponent implements OnInit {
 
   getSharedTexts() {
     this.textService.getShared().subscribe({
-      next: (data: any) => {
+      next: (data: SharedText[]) => {
         this.sharedTexts = data;
-        console.log(data);
-
         this.isLoadingSharedTexts = false;
       },
       error: (err) => {

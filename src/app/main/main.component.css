@@ -6,6 +6,12 @@
   cursor: pointer;
 }
 
+.header__avatar{
+  font-size: 40px;
+  display: flex;
+  align-items: center;
+}
+
 .action {
   margin-right: 30px;
 }
@@ -44,6 +50,7 @@
   height: 200px;
   box-sizing: border-box;
   margin-right: 20px;
+  margin-bottom: 20px;
   display: flex;
   position: relative;
   flex-direction: column;
