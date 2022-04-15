@@ -15,14 +15,41 @@
     </div>
 
     <span class="example-spacer"></span>
-    <button (click)="signOut()" mat-icon-button class="example-icon favorite-icon"
+    <button (click)="signOut()" mat-button class="example-icon favorite-icon"
         aria-label="Example icon-button with heart icon">
         Exit
         <mat-icon>exit_to_app</mat-icon>
     </button>
 </mat-toolbar>
 
-<div class="container">
+<button (click)="isViewTable = !isViewTable">В виде таблицы</button>
+
+<div class="containerCards" *ngIf="!isViewTable">
+    <section class="cards">
+        <div class="cards__item" *ngFor="let text of dataSource">
+            <div class="cards__item__content" [routerLink]="['/text/', text.id,'edit']">
+                <div class="cards__item__preview__wrapper">
+                    <img class="cards__item__preview" *ngIf="text.previewUrl" src="{{text.previewUrl}}">
+                    <div class="cards__item__preview" *ngIf="!text.previewUrl"> </div>
+                </div>
+                <h4 class="cards__item__title">{{text.title}}</h4>
+                <span class="cards__item__updated">{{text.updatedAt}}</span>
+            </div>
+            <button class="cards__item__menu" mat-button [matMenuTriggerFor]="menu"
+                aria-label="Example icon-button with a menu">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="deleteText(text.id)">
+                    <mat-icon>delete</mat-icon>
+                    <span>Удалить</span>
+                </button>
+            </mat-menu>
+        </div>
+    </section>
+</div>
+
+<div class="container" *ngIf="isViewTable">
     <section class="section">
         <div class="justify-between">
             <h1>Мой текста</h1>

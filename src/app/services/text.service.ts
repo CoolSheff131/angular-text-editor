@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Permission } from '../models/permission.model';
+import { Text } from '../models/text.model';
 
 export interface Config {
   text: string;
@@ -86,9 +87,9 @@ export class TextService {
   }
 
   getMine() {
-    return this.http.get(`http://localhost:3000/text`);
+    return this.http.get<Text[]>(`http://localhost:3000/text`);
   }
   getShared() {
-    return this.http.get(`http://localhost:3000/text/shared`);
+    return this.http.get<Text[]>(`http://localhost:3000/text/shared`);
   }
 }

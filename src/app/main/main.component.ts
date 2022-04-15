@@ -47,6 +47,8 @@ export class MainComponent implements OnInit {
   isErrorMineTexts = false;
   isErrorSharedTexts = false;
 
+  isViewTable = false;
+
   constructor(
     private readonly userService: UserService,
     private readonly authService: AuthService,
@@ -76,9 +78,32 @@ export class MainComponent implements OnInit {
   }
 
   getMineTexts() {
+    const month = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
     this.textService.getMine().subscribe({
-      next: (data: any) => {
+      next: (data: Text[]) => {
         this.dataSource = data;
+        data.forEach((text) => {
+          const date = new Date(text.updatedAt);
+
+          text.updatedAt = `${date.getDay()} ${
+            month[date.getMonth()]
+          } ${date.getFullYear()}г.`;
+        });
+        console.log(data);
+
         this.isLoadingMineTexts = false;
       },
       error: (err) => {
@@ -97,6 +122,8 @@ export class MainComponent implements OnInit {
     this.textService.getShared().subscribe({
       next: (data: any) => {
         this.sharedTexts = data;
+        console.log(data);
+
         this.isLoadingSharedTexts = false;
       },
       error: (err) => {

@@ -123,7 +123,6 @@ export class TextEditorComponent implements OnInit {
           .subscribe((d) => {
             console.log('d', d);
           });
-        console.log('data', data);
       });
   }
 
@@ -134,7 +133,6 @@ export class TextEditorComponent implements OnInit {
       allowTaint: false,
       useCORS: true,
     });
-    document.getElementById('DDDD')?.appendChild(canvas);
 
     return new Promise<File>((resolve, reject) => {
       canvas.toBlob((blob) => {
