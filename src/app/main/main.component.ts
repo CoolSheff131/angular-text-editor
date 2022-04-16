@@ -24,14 +24,7 @@ export class MainComponent implements OnInit {
   Me?: User;
   fullname = '';
   activateId = '';
-  displayedColumns: string[] = [
-    'id',
-    'title',
-    'user',
-    'createdAt',
-    'updatedAt',
-    'actions',
-  ];
+  displayedColumns: string[] = ['title', 'user', 'updatedAt', 'actions'];
   month = [
     'January',
     'February',
@@ -56,7 +49,7 @@ export class MainComponent implements OnInit {
   isErrorMineTexts = false;
   isErrorSharedTexts = false;
 
-  isViewTable = false;
+  isViewTable = true;
 
   constructor(
     private readonly userService: UserService,

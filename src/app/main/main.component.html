@@ -29,12 +29,33 @@
         </mat-menu>
     </div>
 </mat-toolbar>
-
+<button class="createBtn" mat-fab color="primary" (click)="createText()">
+    <mat-icon>add</mat-icon>
+</button>
 <div class="containerCards">
-    <button (click)="isViewTable = !isViewTable" mat-button mat-icon-button>
-        <mat-icon *ngIf="!isViewTable"> table_chart</mat-icon>
-        <mat-icon *ngIf="isViewTable">grid_on</mat-icon>
-    </button>
+    <div class="filters">
+        <h2 class="table__item__title">Текста</h2>
+        <mat-form-field class="table__item__user" appearance="standard">
+            <mat-select [value]="'all'">
+                <mat-option [value]="'all'">
+                    Владелец: кто угодно
+                </mat-option>
+                <mat-option [value]="'me'">
+                    Владелец: я
+                </mat-option>
+                <mat-option [value]="'shared'">
+                    Владелец: не я
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <span *ngIf="isViewTable">Дата изменения</span>
+        <div class="filters__btns">
+            <button (click)="isViewTable = !isViewTable" mat-button mat-icon-button>
+                <mat-icon *ngIf="!isViewTable"> table_chart</mat-icon>
+                <mat-icon *ngIf="isViewTable">grid_on</mat-icon>
+            </button>
+        </div>
+    </div>
 
     <section class="cards" *ngIf="!isViewTable">
         <div class="cards__item" *ngFor="let text of dataSource">
@@ -50,7 +71,7 @@
                 <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="deleteText(text.text.id)">
+                <button [disabled]="text.permission != 'owner'" mat-menu-item (click)="deleteText(text.text.id)">
                     <mat-icon>delete</mat-icon>
                     <span>Удалить</span>
                 </button>
@@ -59,59 +80,29 @@
     </section>
 
     <section class="section" *ngIf="isViewTable">
-        <div class="justify-between">
-            <h1>Мой текста</h1>
-            <button mat-flat-button (click)="createText()">Create new Text <mat-icon>add</mat-icon></button>
-        </div>
         <div class="spinner__wrapper" *ngIf="isLoadingMineTexts">
             <mat-spinner></mat-spinner>
         </div>
         <div class="spinner__wrapper" *ngIf="isErrorMineTexts">
             <mat-icon>cloud_off</mat-icon>
         </div>
-        <table *ngIf="!isLoadingMineTexts && !isErrorMineTexts" mat-table [dataSource]="dataSource"
-            class="mat-elevation-z8">
-            <ng-container matColumnDef="id">
-                <th mat-header-cell *matHeaderCellDef> id. </th>
-                <td mat-cell *matCellDef="let element"> {{element.text.id}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="title">
-                <th mat-header-cell *matHeaderCellDef> title </th>
-                <td mat-cell *matCellDef="let element"> {{element.text.title}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="user">
-                <th mat-header-cell *matHeaderCellDef> user </th>
-                <td mat-cell *matCellDef="let element"> {{element.text.user.fullname}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="createdAt">
-                <th mat-header-cell *matHeaderCellDef> createdAt </th>
-                <td mat-cell *matCellDef="let element"> {{element.text.createdAt}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="updatedAt">
-                <th mat-header-cell *matHeaderCellDef> updatedAt </th>
-                <td mat-cell *matCellDef="let element"> {{element.text.updatedAt}} </td>
-            </ng-container>
-            <ng-container matColumnDef="actions">
-                <th mat-header-cell *matHeaderCellDef> Actions </th>
-                <td mat-cell *matCellDef="let element" class="actions">
-                    <a mat-button mat-icon-button [routerLink]="['/text/', element.text.id]" class="action">
-                        <mat-icon>remove_red_eye</mat-icon>
-                    </a>
-                    <a mat-button mat-icon-button (click)="deleteText(element.text.id)" class="btn action">
+        <div *ngIf="!isLoadingMineTexts && !isErrorMineTexts" class="table">
+            <div class="table__item" *ngFor="let text of dataSource">
+                <div class="table__item__content">
+                    <span class="table__item__title">{{text.text.title}}</span>
+                    <span class="table__item__user">{{text.text.user.fullname}}</span>
+                    <span class="table__item__updated">{{text.text.updatedAt}}</span>
+                </div>
+                <button class="table__item__menu" mat-button mat-icon-button [matMenuTriggerFor]="menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button [disabled]="text.permission != 'owner'" mat-menu-item (click)="deleteText(text.text.id)">
                         <mat-icon>delete</mat-icon>
-                    </a>
-                    <a mat-button mat-icon-button [routerLink]="['/text/', element.text.id,'edit']" class="action">
-                        <mat-icon>edit</mat-icon>
-                    </a>
-                </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
+                        <span>Удалить</span>
+                    </button>
+                </mat-menu>
+            </div>
+        </div>
     </section>
 </div>
