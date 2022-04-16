@@ -165,7 +165,7 @@ export class TextEditorComponent implements OnInit {
   ContentChangedHandler(event: any) {
     if (this.permission == 'edit' || this.permission || 'owner') {
       clearTimeout(this.timeout);
-      if (event.source === 'user' && this.text.content) {
+      if (event.source === 'user' && this.text.content !== undefined) {
         this.timeout = setTimeout(() => {
           this.webSocketService.sendMessage(this.text);
         }, 100);
