@@ -16,6 +16,7 @@ import { VideoHandler, ImageHandler, Options } from 'ngx-quill-upload';
 import { ImageService } from '../services/image.service';
 import ImageResize from 'quill-image-resize-module';
 import html2canvas from 'html2canvas';
+import { Permission } from '../models/permission.model';
 
 Quill.register('modules/imageResize', ImageResize);
 Quill.register('modules/imageHandler', ImageHandler);
@@ -37,6 +38,7 @@ export class TextEditorComponent implements OnInit {
   isErrorText = false;
   isLoadingMe = true;
   isErrorMe = false;
+  permission!: Permission;
 
   constructor(
     private webSocketService: WebsocketService,
@@ -76,8 +78,13 @@ export class TextEditorComponent implements OnInit {
                 this.isLoadingText = false;
                 this.webSocketService.leaveRoom();
                 const roomData = JSON.parse(data);
+                this.permission = roomData.userPermission;
+
                 this.text = roomData.data;
                 this.titleCtrl.setValue(this.text?.title);
+                if (this.permission == 'read') {
+                  this.titleCtrl.disable();
+                }
                 this.webSocketService.addUsers(roomData.users);
                 this.webSocketService.openWebSocket(
                   (payload: any) => {
@@ -156,11 +163,13 @@ export class TextEditorComponent implements OnInit {
   }
 
   ContentChangedHandler(event: any) {
-    clearTimeout(this.timeout);
-    if (event.source === 'user' && this.text.content) {
-      this.timeout = setTimeout(() => {
-        this.webSocketService.sendMessage(this.text);
-      }, 100);
+    if (this.permission == 'edit' || this.permission || 'owner') {
+      clearTimeout(this.timeout);
+      if (event.source === 'user' && this.text.content) {
+        this.timeout = setTimeout(() => {
+          this.webSocketService.sendMessage(this.text);
+        }, 100);
+      }
     }
   }
 }

@@ -6,6 +6,10 @@
   margin: 10px auto;
 }
 
+.hide{
+  display: none;
+}
+
 .btn__icon{
   text-align: left;
 }
@@ -16,9 +20,10 @@
   align-items: center;
 }
 
-.text__title{
+.text__title, .text__title:disabled{
   border: 1px solid transparent;
   font-size: 15px;
+  color: black;
 }
 
 .text__title:hover{
