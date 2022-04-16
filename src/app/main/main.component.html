@@ -88,7 +88,7 @@
         </div>
         <div *ngIf="!isLoadingMineTexts && !isErrorMineTexts" class="table">
             <div class="table__item" *ngFor="let text of dataSource">
-                <div class="table__item__content">
+                <div class="table__item__content" [routerLink]="['/text/', text.text.id,'edit']">
                     <span class="table__item__title">{{text.text.title}}</span>
                     <span class="table__item__user">{{text.text.user.fullname}}</span>
                     <span class="table__item__updated">{{text.text.updatedAt}}</span>
