@@ -20,12 +20,17 @@
             <mat-icon *ngIf="!isLoadingMe && !isErrorMe" mat-button [matMenuTriggerFor]="me" class="header__avatar">
                 account_circle</mat-icon>
         </button>
-        <mat-menu #me="matMenu">
-            <h1>{{Me?.fullname}}</h1>
-            <button (click)="signOut()" mat-button>
-                Exit
-                <mat-icon>exit_to_app</mat-icon>
+        <mat-menu #me="matMenu" class="menuContainer">
+            <div class="menu__avatar__wrapper">
+                <mat-icon [inline]="true" class="menu__avatar">
+                    account_circle</mat-icon>
+            </div>
+            <h1 class="menu__fullname">{{Me?.fullname}}</h1>
+            <h3 class="menu__email">{{Me?.email}}</h3>
+            <button mat-menu-item class="menu__btn" (click)="signOut()">
+                Выйти
             </button>
+
         </mat-menu>
     </div>
 </mat-toolbar>
