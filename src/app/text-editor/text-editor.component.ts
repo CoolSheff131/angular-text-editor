@@ -127,9 +127,7 @@ export class TextEditorComponent implements OnInit {
 
         this.textService
           .updateTextPreviewById(this.text.id, previewImg)
-          .subscribe((d) => {
-            console.log('d', d);
-          });
+          .subscribe((d) => {});
       });
   }
 
@@ -158,7 +156,6 @@ export class TextEditorComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    console.log('Destroyed');
     this.webSocketService.leaveRoom();
   }
 

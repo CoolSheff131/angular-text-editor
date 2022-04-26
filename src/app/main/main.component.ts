@@ -46,6 +46,7 @@ export class MainComponent implements OnInit {
   isErrorMe = false;
   isErrorMineTexts = false;
   searchedTitle = '';
+  ownerFilter: 'all' | 'me' | 'shared' = 'all';
 
   isViewTable = true;
 
@@ -58,8 +59,7 @@ export class MainComponent implements OnInit {
     public dialog: MatDialog
   ) {
     this.getMe();
-    this.getMineTexts();
-    // this.getSharedTexts();
+    this.getTexts();
   }
 
   ngOnInit(): void {}
@@ -77,10 +77,24 @@ export class MainComponent implements OnInit {
     });
   }
 
-  getMineTexts() {
+  filterByOwner() {
+    switch (this.ownerFilter) {
+      case 'me':
+        this.dataSource = this.dataSource.filter(
+          (text) => text.text.user.id === this.Me?.id
+        );
+        break;
+      case 'shared':
+        this.dataSource = this.dataSource.filter(
+          (text) => text.text.user.id !== this.Me?.id
+        );
+        break;
+    }
+  }
+
+  getTexts() {
     this.textService.getMine().subscribe({
       next: (data: SharedText[]) => {
-        this.dataSource = data;
         data.forEach((text) => {
           const date = new Date(text.text.updatedAt);
 
@@ -88,12 +102,11 @@ export class MainComponent implements OnInit {
             this.month[date.getMonth()]
           } ${date.getFullYear()}г.`;
         });
-        console.log(data);
-
+        this.dataSource = data;
+        this.filterByOwner();
         this.isLoadingMineTexts = false;
       },
       error: (err) => {
-        console.log(err);
         this.isLoadingMineTexts = false;
         this.isErrorMineTexts = true;
       },
@@ -104,25 +117,11 @@ export class MainComponent implements OnInit {
     this._snackBar.open(message, 'ok', { duration: 2000 });
   }
 
-  // getSharedTexts() {
-  //   this.textService.getShared().subscribe({
-  //     next: (data: SharedText[]) => {
-  //       this.sharedTexts = data;
-  //       this.isLoadingSharedTexts = false;
-  //     },
-  //     error: (err) => {
-  //       console.log(err);
-  //       this.isLoadingSharedTexts = false;
-  //       this.isErrorSharedTexts = true;
-  //     },
-  //   });
-  // }
-
   deleteText(id: string) {
     this.textService.deleteById(id).subscribe({
       next: (data) => {
         this.openSnackBar('Текст удален');
-        this.getMineTexts();
+        this.getTexts();
       },
       error: (error) => {
         this.openSnackBar('Ошибка удаления текста');
@@ -145,7 +144,7 @@ export class MainComponent implements OnInit {
         this.textService.create(name, '').subscribe({
           next: (data) => {
             this.openSnackBar('Текст создан');
-            this.getMineTexts();
+            this.getTexts();
           },
           error: (error) => {
             this.openSnackBar('Ошибка создания текста');
@@ -155,38 +154,38 @@ export class MainComponent implements OnInit {
     });
   }
 
-  activate() {
-    this.textService.activate(this.activateId).subscribe({
-      next: (data) => {
-        console.log(data);
+  // activate() {
+  //   this.textService.activate(this.activateId).subscribe({
+  //     next: (data) => {
 
-        this.openSnackBar('Другой текст найден');
-        // this.getSharedTexts();
-      },
-      error: (error) => {
-        console.log(error);
-        if (error.status === 406) {
-          return this.openSnackBar('Вы владец текста!');
-        }
-        if (error.status === 404) {
-          return this.openSnackBar('Токена не существует!');
-        }
-        if (error.status === 403) {
-          return this.openSnackBar('У вас уже есть доступ к тексту!');
-        }
-        this.openSnackBar('Ошибка активации');
-      },
-    });
-  }
+  //       this.openSnackBar('Другой текст найден');
+  //       // this.getSharedTexts();
+  //     },
+  //     error: (error) => {
+
+  //       if (error.status === 406) {
+  //         return this.openSnackBar('Вы владец текста!');
+  //       }
+  //       if (error.status === 404) {
+  //         return this.openSnackBar('Токена не существует!');
+  //       }
+  //       if (error.status === 403) {
+  //         return this.openSnackBar('У вас уже есть доступ к тексту!');
+  //       }
+  //       this.openSnackBar('Ошибка активации');
+  //     },
+  //   });
+  // }
 
   onSearch(searchedTitle: string) {
     this.searchedTitle = searchedTitle;
     if (searchedTitle) {
       this.textService.search(searchedTitle).subscribe((searchedText) => {
         this.dataSource = searchedText;
+        this.filterByOwner();
       });
     } else {
-      this.getMineTexts();
+      this.getTexts();
     }
   }
 }

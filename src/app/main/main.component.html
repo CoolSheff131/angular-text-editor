@@ -44,7 +44,7 @@
         </h2>
 
         <mat-form-field class="table__item__user" appearance="standard">
-            <mat-select [value]="'all'">
+            <mat-select (closed)="onSearch(search.value)" [(value)]="ownerFilter">
                 <mat-option [value]="'all'">
                     Владелец: кто угодно
                 </mat-option>

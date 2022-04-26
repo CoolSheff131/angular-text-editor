@@ -34,7 +34,6 @@ export class TextService {
   updateTextPreviewById(id: string, preview: Blob) {
     const uploadData = new FormData();
     uploadData.append('file', preview, 'preview');
-    console.log(preview);
 
     return this.http.post(
       `http://localhost:3000/text/${id}/preview`,

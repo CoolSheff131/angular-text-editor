@@ -9,7 +9,6 @@ export class ImageService {
 
   upload(file: File) {
     return new Promise((resolve, reject) => {
-      console.log('UPLOADING');
       if (
         file.type === 'image/jpeg' ||
         file.type === 'image/png' ||

@@ -25,8 +25,6 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {}
 
   login() {
-    console.log('login');
-
     this.authService
       .login(this.emailCtrl.value, this.passwordCtrl.value)
       .subscribe(
@@ -35,7 +33,6 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/']);
         },
         (error) => {
-          console.log(error);
           this._snackBar.open('Неправильный логин или пароль');
         }
       );

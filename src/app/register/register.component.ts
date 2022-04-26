@@ -36,12 +36,10 @@ export class RegisterComponent implements OnInit {
       )
       .subscribe(
         (data: any) => {
-          console.log(data);
           localStorage.setItem('token', data.token);
           this.router.navigate(['/']);
         },
         (error) => {
-          console.log(error);
           this._snackBar.open('Ошибка регистрации', 'Закрыть', {
             duration: 3000,
           });
