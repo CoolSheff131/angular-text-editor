@@ -177,10 +177,12 @@ export class MainComponent implements OnInit {
   //   });
   // }
 
-  onSearch(searchedTitle: string) {
-    this.searchedTitle = searchedTitle;
-    if (searchedTitle) {
-      this.textService.search(searchedTitle).subscribe((searchedText) => {
+  onSearch(searchedTitle: string, isSearch = true) {
+    if (isSearch) {
+      this.searchedTitle = searchedTitle;
+    }
+    if (this.searchedTitle) {
+      this.textService.search(this.searchedTitle).subscribe((searchedText) => {
         this.dataSource = searchedText;
         this.filterByOwner();
       });
