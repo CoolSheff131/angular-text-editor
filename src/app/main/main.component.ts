@@ -41,13 +41,11 @@ export class MainComponent implements OnInit {
   ];
 
   dataSource: SharedText[] = [];
-  sharedTexts: SharedText[] = [];
   isLoadingMe = true;
   isLoadingMineTexts = true;
-  isLoadingSharedTexts = true;
   isErrorMe = false;
   isErrorMineTexts = false;
-  isErrorSharedTexts = false;
+  searchedTitle = '';
 
   isViewTable = true;
 
@@ -61,7 +59,7 @@ export class MainComponent implements OnInit {
   ) {
     this.getMe();
     this.getMineTexts();
-    this.getSharedTexts();
+    // this.getSharedTexts();
   }
 
   ngOnInit(): void {}
@@ -106,19 +104,19 @@ export class MainComponent implements OnInit {
     this._snackBar.open(message, 'ok', { duration: 2000 });
   }
 
-  getSharedTexts() {
-    this.textService.getShared().subscribe({
-      next: (data: SharedText[]) => {
-        this.sharedTexts = data;
-        this.isLoadingSharedTexts = false;
-      },
-      error: (err) => {
-        console.log(err);
-        this.isLoadingSharedTexts = false;
-        this.isErrorSharedTexts = true;
-      },
-    });
-  }
+  // getSharedTexts() {
+  //   this.textService.getShared().subscribe({
+  //     next: (data: SharedText[]) => {
+  //       this.sharedTexts = data;
+  //       this.isLoadingSharedTexts = false;
+  //     },
+  //     error: (err) => {
+  //       console.log(err);
+  //       this.isLoadingSharedTexts = false;
+  //       this.isErrorSharedTexts = true;
+  //     },
+  //   });
+  // }
 
   deleteText(id: string) {
     this.textService.deleteById(id).subscribe({
@@ -163,7 +161,7 @@ export class MainComponent implements OnInit {
         console.log(data);
 
         this.openSnackBar('Другой текст найден');
-        this.getSharedTexts();
+        // this.getSharedTexts();
       },
       error: (error) => {
         console.log(error);
@@ -179,5 +177,16 @@ export class MainComponent implements OnInit {
         this.openSnackBar('Ошибка активации');
       },
     });
+  }
+
+  onSearch(searchedTitle: string) {
+    this.searchedTitle = searchedTitle;
+    if (searchedTitle) {
+      this.textService.search(searchedTitle).subscribe((searchedText) => {
+        this.dataSource = searchedText;
+      });
+    } else {
+      this.getMineTexts();
+    }
   }
 }

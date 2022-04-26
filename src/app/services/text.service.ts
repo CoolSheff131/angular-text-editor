@@ -13,6 +13,11 @@ export interface Config {
   providedIn: 'root',
 })
 export class TextService {
+  search(searchedTitle: string) {
+    return this.http.get<SharedText[]>(
+      `http://localhost:3000/text/search/${searchedTitle}`
+    );
+  }
   constructor(private http: HttpClient) {}
 
   getTextById(id: string): Observable<any> {

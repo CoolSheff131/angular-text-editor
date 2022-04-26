@@ -5,7 +5,7 @@
 
     <div class="toolbar__item search">
         <mat-icon class="search__icon">search</mat-icon>
-        <input class="search__field" placeholder="Поиск">
+        <input #search (keyup.enter)="onSearch(search.value)" class="search__field" placeholder="Поиск">
     </div>
 
     <span class="example-spacer"></span>
@@ -39,7 +39,10 @@
 </button>
 <div class="containerCards">
     <div class="filters">
-        <h2 class="table__item__title">Текста</h2>
+        <h2 class="table__item__title">
+            {{searchedTitle === ''? 'Текста': 'Поиск: '+searchedTitle}}
+        </h2>
+
         <mat-form-field class="table__item__user" appearance="standard">
             <mat-select [value]="'all'">
                 <mat-option [value]="'all'">
