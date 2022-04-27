@@ -19,7 +19,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { TextViewComponent } from './text-view/text-view.component';
 import { TextNotFoundComponent } from './text-not-found/text-not-found.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -37,7 +36,7 @@ import { AvatarComponent } from './shared/avatar/avatar.component';
     LoginComponent,
     RegisterComponent,
     MainComponent,
-    TextViewComponent,
+
     TextNotFoundComponent,
     DialogShareTextComponent,
     CreateTextDialogComponent,
@@ -49,8 +48,7 @@ import { AvatarComponent } from './shared/avatar/avatar.component';
     HttpClientModule,
     RouterModule.forRoot([
       { path: 'textNotFound', component: TextNotFoundComponent },
-      { path: 'text/:id', component: TextViewComponent },
-      { path: 'text/:id/edit', component: TextEditorComponent },
+      { path: 'text/:id', component: TextEditorComponent },
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },
       { path: '', component: MainComponent },
