@@ -12,4 +12,8 @@ export class UserService {
   getMe(): Observable<User> {
     return this.http.get<User>(`http://localhost:3000/user/me`);
   }
+
+  uploadAvatar(formData) {
+    return this.http.post('http://localhost:3000/user/uploadAvatar', formData);
+  }
 }

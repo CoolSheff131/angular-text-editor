@@ -1,0 +1,9 @@
+<div class="avatar" [style.width.px]="size" [style.height.px]="size">
+    <div *ngIf="url; else icon">
+        <img src="{{url}}">
+    </div>
+    <ng-template #icon>
+        <mat-icon class="icon" [style.fontSize]="size + 'px'">
+            account_circle</mat-icon>
+    </ng-template>
+</div>

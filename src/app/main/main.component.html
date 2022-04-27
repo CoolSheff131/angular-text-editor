@@ -16,14 +16,13 @@
         <span *ngIf="isErrorMe">
             <mat-icon>cloud_off</mat-icon>
         </span>
-        <button mat-button mat-icon-button>
-            <mat-icon *ngIf="!isLoadingMe && !isErrorMe" mat-button [matMenuTriggerFor]="me" class="header__avatar">
-                account_circle</mat-icon>
+        <button *ngIf="!isLoadingMe && !isErrorMe" mat-button mat-icon-button [matMenuTriggerFor]="me">
+            <app-avatar [size]="40" [url]="Me?.avatarUrl"></app-avatar>
         </button>
         <mat-menu #me="matMenu" class="menuContainer">
-            <div class="menu__avatar__wrapper">
-                <mat-icon [inline]="true" class="menu__avatar">
-                    account_circle</mat-icon>
+            <input hidden type="file" class="file-input" (change)="onAvatarSelected($event)" #fileUpload>
+            <div (click)="fileUpload.click()" class="menu__avatar__wrapper">
+                <app-avatar [size]="80" [url]="Me?.avatarUrl"></app-avatar>
             </div>
             <h1 class="menu__fullname">{{Me?.fullname}}</h1>
             <h3 class="menu__email">{{Me?.email}}</h3>

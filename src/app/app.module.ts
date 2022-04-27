@@ -29,6 +29,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CreateTextDialogComponent } from './create-text-dialog/create-text-dialog.component';
+import { AvatarComponent } from './shared/avatar/avatar.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,6 +41,7 @@ import { CreateTextDialogComponent } from './create-text-dialog/create-text-dial
     TextNotFoundComponent,
     DialogShareTextComponent,
     CreateTextDialogComponent,
+    AvatarComponent,
   ],
   imports: [
     BrowserModule,

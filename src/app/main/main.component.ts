@@ -1,3 +1,4 @@
+import { HttpEventType } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -68,6 +69,8 @@ export class MainComponent implements OnInit {
     this.userService.getMe().subscribe({
       next: (data) => {
         this.Me = data;
+        console.log(data);
+
         this.isLoadingMe = false;
       },
       error: (error) => {
@@ -188,6 +191,17 @@ export class MainComponent implements OnInit {
       });
     } else {
       this.getTexts();
+    }
+  }
+
+  onAvatarSelected(event) {
+    const file: File = event.target.files[0];
+
+    if (file) {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      this.userService.uploadAvatar(formData).subscribe(() => [this.getMe()]);
     }
   }
 }
