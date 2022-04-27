@@ -204,4 +204,10 @@ export class MainComponent implements OnInit {
       this.userService.uploadAvatar(formData).subscribe(() => [this.getMe()]);
     }
   }
+
+  deleteAvatar() {
+    this.userService.deleteAvatar().subscribe(() => {
+      this.getMe();
+    });
+  }
 }

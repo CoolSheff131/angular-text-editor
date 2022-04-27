@@ -17,9 +17,11 @@
         <div class="users__wrapper">
             <ul class="users">
                 <ng-template [ngIf]="usersInRoom!.length < 4" [ngIfElse]="userCount">
-                    <mat-icon *ngFor="let user of usersInRoom" class="users__item header__avatar"
+                    <app-avatar *ngFor="let user of usersInRoom" class="users__item" [url]="user.avatarUrl"
+                        [matTooltip]="user.fullname"></app-avatar>
+                    <!-- <mat-icon *ngFor="let user of usersInRoom" class="users__item header__avatar"
                         [matTooltip]="user.fullname">account_circle
-                    </mat-icon>
+                    </mat-icon> -->
                 </ng-template>
 
                 <ng-template #userCount>
@@ -28,8 +30,7 @@
                     <mat-menu #menu="matMenu">
                         <div class="usersMenu">
                             <div *ngFor="let user of usersInRoom" class="userMenu__item">
-                                <mat-icon class="header__avatar">account_circle
-                                </mat-icon>
+                                <app-avatar [url]="user.avatarUrl"></app-avatar>
                                 <span class="userFullname">
                                     {{user.fullname}}
                                 </span>
@@ -51,9 +52,8 @@
         <span *ngIf="isErrorMe">
             <mat-icon>cloud_off</mat-icon>
         </span>
-        <mat-icon *ngIf="!isLoadingMe && !isErrorMe" class="header__avatar">account_circle</mat-icon>
-        <!-- <img class="header__right__items" mat-card-avatar
-            src="https://material.angular.io/assets/img/examples/shiba1.jpg" alt="Photo of a Shiba Inu"> -->
+        <app-avatar *ngIf="!isLoadingMe && !isErrorMe" [url]="userMe.avatarUrl"></app-avatar>
+
     </div>
 </div>
 

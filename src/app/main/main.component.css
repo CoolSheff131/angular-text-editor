@@ -197,6 +197,7 @@ a {
   width: 250px;
   margin: 0 auto;
   display: flex;
+  cursor: pointer;
   justify-content: center;
   padding: 0;
   text-align: center;

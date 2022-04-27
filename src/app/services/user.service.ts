@@ -16,4 +16,8 @@ export class UserService {
   uploadAvatar(formData) {
     return this.http.post('http://localhost:3000/user/uploadAvatar', formData);
   }
+
+  deleteAvatar() {
+    return this.http.delete('http://localhost:3000/user/deleteAvatar');
+  }
 }
