@@ -1,21 +1,22 @@
-<div>
-    <mat-card class="my-container">
+<div class="body">
+    <mat-card class="container">
+        <h1 class="title">Вход</h1>
         <mat-form-field>
-            <mat-label>Enter your email</mat-label>
-            <input matInput placeholder="pat@example.com" [formControl]="emailCtrl" required>
-            <!-- <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error> -->
+            <mat-label>Введите эл. почту</mat-label>
+            <input matInput ngModel email type="email" placeholder="yourEmail@mail.ru" [formControl]="emailCtrl"
+                required>
         </mat-form-field>
 
         <mat-form-field>
-            <mat-label>Enter your password</mat-label>
+            <mat-label>Введите пароль</mat-label>
             <input matInput [type]="hide ? 'password' : 'text'" [formControl]="passwordCtrl" required>
             <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
                 [attr.aria-pressed]="hide">
                 <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
             </button>
         </mat-form-field>
-        <button mat-raised-button (click)="login()" type="button">Login</button>
-        <p class="text-center">or</p>
-        <button mat-button (click)="gotoRegister()" type="button">Register</button>
+        <button mat-raised-button (click)="login()" type="button">Войти</button>
+        <p class="text-center">или</p>
+        <button mat-button (click)="gotoRegister()" type="button">Зарегистрироваться</button>
     </mat-card>
 </div>

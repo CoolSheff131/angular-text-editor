@@ -28,6 +28,19 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {}
 
   register() {
+    if (this.fullnameCtrl.invalid) {
+      this._snackBar.open('Введите корректный email');
+      return;
+    }
+    if (this.emailCtrl.invalid) {
+      this._snackBar.open('Введите корректный email');
+      return;
+    }
+    if (this.passwordCtrl.invalid) {
+      this._snackBar.open('Введите корректный пароль');
+      return;
+    }
+
     this.authService
       .register(
         this.fullnameCtrl.value,

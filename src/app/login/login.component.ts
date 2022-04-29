@@ -25,6 +25,15 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {}
 
   login() {
+    if (this.emailCtrl.invalid) {
+      this._snackBar.open('Введите корректный email');
+      return;
+    }
+    if (this.passwordCtrl.invalid) {
+      this._snackBar.open('Введите корректный пароль');
+      return;
+    }
+
     this.authService
       .login(this.emailCtrl.value, this.passwordCtrl.value)
       .subscribe(
