@@ -2,23 +2,29 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { io } from 'socket.io-client';
 import { User } from '../models/user.model';
+import { AuthService } from './auth.service';
 @Injectable({
   providedIn: 'root',
 })
 export class WebsocketService {
-  // subject: any
   private _socket;
   private _usersInRoom: BehaviorSubject<User[]> = new BehaviorSubject<User[]>(
     []
   );
   public usersInRoom: Observable<User[]> = this._usersInRoom.asObservable();
-  // private _text: BehaviorSubject<string> = new BehaviorSubject<string>('');
-  // public text: Observable<string> = this._text.asObservable();
 
   textId?: string;
   user?: User;
-  constructor() {
-    this._socket = io('http://localhost:3000');
+  constructor(public auth: AuthService) {
+    this._socket = io('http://localhost:3000', {
+      transportOptions: {
+        polling: {
+          extraHeaders: {
+            Authorization: `Bearer ${this.auth.getToken()}`,
+          },
+        },
+      },
+    });
     this._socket.on('joinedRoom', (joinedUser: User[]) => {
       this._usersInRoom.next(joinedUser);
     });
