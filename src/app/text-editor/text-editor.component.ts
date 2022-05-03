@@ -152,6 +152,7 @@ export class TextEditorComponent implements OnInit {
       data: {
         textId: this.text.id,
       },
+      width: '6000px',
     });
   }
 

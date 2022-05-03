@@ -35,7 +35,7 @@ export class DialogShareTextComponent implements OnInit {
   isErrorUserPermission = false;
   isLoadingUserPermission = true;
   displayedColumnsToken: string[] = ['id', 'permission', 'actions'];
-  displayedColumnsUser: string[] = ['id', 'permission', 'user', 'actions'];
+  displayedColumnsUser: string[] = ['permission', 'user', 'actions'];
 
   selectedPermission: Permission;
 
@@ -55,14 +55,14 @@ export class DialogShareTextComponent implements OnInit {
       .getSingleSharedLinks(this.textId)
       .subscribe((data: any) => {
         this.tokens = data;
+        console.log(data);
+
         this.isLoadingLinks = false;
       });
   }
 
   copySignleLink(token: string) {
-    navigator.clipboard.writeText(
-      `http://localhost:3000/right-assignment-tokens/activate/${token}`
-    );
+    navigator.clipboard.writeText(token);
     this._snackBar.open('Скопировано!', 'ok', { duration: 2000 });
   }
 

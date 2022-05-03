@@ -1,5 +1,5 @@
-<h1 mat-dialog-title>
-    <mat-icon>group_add</mat-icon> Предоставьте доступ пользователям <mat-icon>settings</mat-icon>
+<h1 mat-dialog-title class="header">
+    <mat-icon>group_add</mat-icon> Предоставьте доступ пользователям
 </h1>
 <div mat-dialog-content>
     <h3>Сгенерировать одноразовую ссылку</h3>
@@ -20,21 +20,21 @@
     <div>
         <h3>Одноразовые ссылки</h3>
         <table *ngIf="!isLoadingLinks && !isErrorLinks" mat-table [dataSource]="tokens">
-            <ng-container matColumnDef="id">
-                <th mat-header-cell *matHeaderCellDef> id. </th>
-                <td mat-cell *matCellDef="let token">
-                    http://localhost:3000/right-assignment-tokens/activate/{{token.id}}</td>
-            </ng-container>
-
             <ng-container matColumnDef="permission">
-                <th mat-header-cell *matHeaderCellDef> permission </th>
+                <th mat-header-cell *matHeaderCellDef>Разрешение</th>
                 <td mat-cell *matCellDef="let token"> {{token.permission}} </td>
             </ng-container>
 
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef>Токен</th>
+                <td mat-cell *matCellDef="let token">
+                    {{token.token}}</td>
+            </ng-container>
+
             <ng-container matColumnDef="actions">
-                <th mat-header-cell *matHeaderCellDef> Actions </th>
+                <th mat-header-cell *matHeaderCellDef>Действия</th>
                 <td mat-cell *matCellDef="let element" class="actions">
-                    <a (click)="copySignleLink(element.id)" class="action" mat-button>
+                    <a (click)="copySignleLink(element.token)" class="action" mat-button>
                         <mat-icon>file_copy</mat-icon>
                     </a>
                     <a (click)="deleteSingleLink(element.id)" mat-button class="btn action">
@@ -50,22 +50,18 @@
     <div>
         <h3>Доступен</h3>
         <table *ngIf="!isLoadingUserPermission && !isErrorUserPermission" mat-table [dataSource]="userPermissions">
-            <ng-container matColumnDef="id">
-                <th mat-header-cell *matHeaderCellDef> id. </th>
-                <td mat-cell *matCellDef="let token">{{token.id}}</td>
-            </ng-container>
 
             <ng-container matColumnDef="user">
-                <th mat-header-cell *matHeaderCellDef> user </th>
+                <th mat-header-cell *matHeaderCellDef>Пользователь</th>
                 <td mat-cell *matCellDef="let token"> {{token.user.fullname}} </td>
             </ng-container>
             <ng-container matColumnDef="permission">
-                <th mat-header-cell *matHeaderCellDef> permission </th>
+                <th mat-header-cell *matHeaderCellDef>Разрешение</th>
                 <td mat-cell *matCellDef="let token"> {{token.permission}} </td>
             </ng-container>
 
             <ng-container matColumnDef="actions">
-                <th mat-header-cell *matHeaderCellDef> Actions </th>
+                <th mat-header-cell *matHeaderCellDef>Действия</th>
                 <td mat-cell *matCellDef="let element" class="actions">
                     <a (click)="deleteUserPermission(element.id)" mat-button class="btn action">
                         <mat-icon>delete</mat-icon>
