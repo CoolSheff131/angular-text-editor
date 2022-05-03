@@ -1,9 +1,11 @@
 import { HttpEventType } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { CreateTextDialogComponent } from '../create-text-dialog/create-text-dialog.component';
+import { DialogActiveTokenComponent } from '../dialog-active-token/dialog-active-token.component';
 import { Permission } from '../models/permission.model';
 import { Text } from '../models/text.model';
 import { User } from '../models/user.model';
@@ -157,28 +159,14 @@ export class MainComponent implements OnInit {
     });
   }
 
-  // activate() {
-  //   this.textService.activate(this.activateId).subscribe({
-  //     next: (data) => {
-
-  //       this.openSnackBar('Другой текст найден');
-  //       // this.getSharedTexts();
-  //     },
-  //     error: (error) => {
-
-  //       if (error.status === 406) {
-  //         return this.openSnackBar('Вы владец текста!');
-  //       }
-  //       if (error.status === 404) {
-  //         return this.openSnackBar('Токена не существует!');
-  //       }
-  //       if (error.status === 403) {
-  //         return this.openSnackBar('У вас уже есть доступ к тексту!');
-  //       }
-  //       this.openSnackBar('Ошибка активации');
-  //     },
-  //   });
-  // }
+  activateToken() {
+    this.dialog
+      .open(DialogActiveTokenComponent)
+      .afterClosed()
+      .subscribe(() => {
+        this.getTexts();
+      });
+  }
 
   onSearch(searchedTitle: string, isSearch = true) {
     if (isSearch) {

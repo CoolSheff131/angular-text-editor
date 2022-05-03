@@ -29,6 +29,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CreateTextDialogComponent } from './create-text-dialog/create-text-dialog.component';
 import { AvatarComponent } from './shared/avatar/avatar.component';
+import { DialogActiveTokenComponent } from './dialog-active-token/dialog-active-token.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,6 +42,7 @@ import { AvatarComponent } from './shared/avatar/avatar.component';
     DialogShareTextComponent,
     CreateTextDialogComponent,
     AvatarComponent,
+    DialogActiveTokenComponent,
   ],
   imports: [
     BrowserModule,

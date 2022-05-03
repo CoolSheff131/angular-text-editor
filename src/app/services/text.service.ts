@@ -69,9 +69,9 @@ export class TextService {
     );
   }
 
-  activate(id: string) {
+  activateToken(token: string) {
     return this.http.get(
-      `http://localhost:3000/right-assignment-tokens/activate/${id}`
+      `http://localhost:3000/right-assignment-tokens/activate/${token}`
     );
   }
 

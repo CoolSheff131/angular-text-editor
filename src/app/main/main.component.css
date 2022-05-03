@@ -58,6 +58,12 @@
   right: 20px;
 }
 
+.activateTokenBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 100px;
+}
+
 .table {
   width: 100%;
 }
