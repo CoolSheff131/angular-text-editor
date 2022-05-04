@@ -20,6 +20,31 @@ export class TextService {
   }
   constructor(private http: HttpClient) {}
 
+  uploadImage(file: File) {
+    return new Promise((resolve, reject) => {
+      if (
+        file.type === 'image/jpeg' ||
+        file.type === 'image/png' ||
+        file.type === 'image/jpg'
+      ) {
+        const uploadData = new FormData();
+        uploadData.append('file', file, file.name);
+        this.http
+          .post('http://localhost:3000/text/upload', uploadData)
+          .toPromise()
+          .then((result: any) => {
+            resolve(result.url);
+          })
+          .catch((error) => {
+            reject('Upload failed');
+            console.error('Error:', error);
+          });
+      } else {
+        reject('Unsupported type');
+      }
+    });
+  }
+
   getTextById(id: string): Observable<any> {
     return this.http.get(`http://localhost:3000/text/${id}`, {
       responseType: 'text',

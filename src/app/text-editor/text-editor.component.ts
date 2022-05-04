@@ -13,7 +13,6 @@ import * as QuillNamespace from 'quill';
 let Quill: any = QuillNamespace;
 
 import { VideoHandler, ImageHandler, Options } from 'ngx-quill-upload';
-import { ImageService } from '../services/image.service';
 import ImageResize from 'quill-image-resize-module';
 import html2canvas from 'html2canvas';
 import { Permission } from '../models/permission.model';
@@ -39,6 +38,7 @@ export class TextEditorComponent implements OnInit {
   isLoadingMe = true;
   isErrorMe = false;
   permission!: Permission;
+  textSaving = false;
 
   constructor(
     private webSocketService: WebsocketService,
@@ -46,8 +46,7 @@ export class TextEditorComponent implements OnInit {
     private textService: TextService,
     private userService: UserService,
     private router: Router,
-    public dialog: MatDialog,
-    private imageService: ImageService
+    public dialog: MatDialog
   ) {
     this.titleCtrl = new FormControl();
 
@@ -55,7 +54,7 @@ export class TextEditorComponent implements OnInit {
       toolbar: '#toolbar',
       imageHandler: {
         upload: (file) => {
-          return this.imageService.upload(file);
+          return this.textService.uploadImage(file);
         },
         accepts: ['png', 'jpg', 'jpeg', 'jfif'], // Extensions to allow for images (Optional) | Default - ['jpg', 'jpeg', 'png']
       } as Options,
@@ -116,6 +115,7 @@ export class TextEditorComponent implements OnInit {
   }
 
   async saveChanges() {
+    this.textSaving = true;
     this.textService
       .updateTextById(
         this.text.id,
@@ -124,10 +124,11 @@ export class TextEditorComponent implements OnInit {
       )
       .subscribe(async (data) => {
         const previewImg = await this.screenshot();
-
         this.textService
           .updateTextPreviewById(this.text.id, previewImg)
-          .subscribe((d) => {});
+          .subscribe((d) => {
+            this.textSaving = false;
+          });
       });
   }
 

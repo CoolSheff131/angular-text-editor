@@ -8,7 +8,7 @@
         <div class="header__inputs">
             <input class="text__title" matInput [formControl]="titleCtrl" required>
             <div class="buttons">
-                <button class="button" *ngIf="permission != 'read'" (click)="saveChanges()">
+                <button class="button" [disabled]="textSaving" *ngIf="permission != 'read'" (click)="saveChanges()">
                     SAVE
                 </button>
             </div>
