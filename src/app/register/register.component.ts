@@ -27,13 +27,17 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  openSnackBar(message: string) {
+    this._snackBar.open(message, 'ok', { duration: 2000 });
+  }
+
   register() {
     if (this.fullnameCtrl.invalid) {
-      this._snackBar.open('Введите корректный email');
+      this.openSnackBar('Введите корректный email');
       return;
     }
     if (this.emailCtrl.invalid) {
-      this._snackBar.open('Введите корректный email');
+      this.openSnackBar('Введите корректный email');
       return;
     }
     if (this.passwordCtrl.invalid) {
@@ -53,9 +57,7 @@ export class RegisterComponent implements OnInit {
           this.router.navigate(['/']);
         },
         (error) => {
-          this._snackBar.open('Ошибка регистрации', 'Закрыть', {
-            duration: 3000,
-          });
+          this.openSnackBar('Ошибка регистрации');
         }
       );
   }

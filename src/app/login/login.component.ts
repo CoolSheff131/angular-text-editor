@@ -24,13 +24,17 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  openSnackBar(message: string) {
+    this._snackBar.open(message, 'ok', { duration: 2000 });
+  }
+
   login() {
     if (this.emailCtrl.invalid) {
-      this._snackBar.open('Введите корректный email');
+      this.openSnackBar('Введите корректный email');
       return;
     }
     if (this.passwordCtrl.invalid) {
-      this._snackBar.open('Введите корректный пароль');
+      this.openSnackBar('Введите корректный пароль');
       return;
     }
 
@@ -42,7 +46,7 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/']);
         },
         (error) => {
-          this._snackBar.open('Неправильный логин или пароль');
+          this.openSnackBar('Неправильный логин или пароль');
         }
       );
   }

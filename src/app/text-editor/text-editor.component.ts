@@ -15,6 +15,7 @@ let Quill: any = QuillNamespace;
 import { VideoHandler, ImageHandler, Options } from 'ngx-quill-upload';
 import ImageResize from 'quill-image-resize-module';
 import html2canvas from 'html2canvas';
+import html2pdf from 'html-to-pdf-js';
 import { Permission } from '../models/permission.model';
 
 Quill.register('modules/imageResize', ImageResize);
@@ -108,6 +109,20 @@ export class TextEditorComponent implements OnInit {
         this.isLoadingMe = false;
       },
     });
+  }
+
+  saveToPDF(): void {
+    let html = document.getElementById('textContainer');
+
+    var opt = {
+      margin: 0,
+      filename: 'myfile.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+    };
+
+    // New Promise-based usage:
+    html2pdf().set(opt).from(html).save();
   }
 
   ngOnInit(): void {
