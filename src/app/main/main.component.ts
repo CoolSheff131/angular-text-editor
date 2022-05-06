@@ -71,7 +71,6 @@ export class MainComponent implements OnInit {
     this.userService.getMe().subscribe({
       next: (data) => {
         this.Me = data;
-        console.log(data);
 
         this.isLoadingMe = false;
       },

@@ -30,7 +30,7 @@ Quill.register('modules/videoHandler', VideoHandler);
 export class TextEditorComponent implements OnInit {
   usersInRoom: User[] | undefined;
   userMe!: User;
-  text!: Text;
+  //  text!: Text;
   titleCtrl: FormControl;
   modules: any;
   timeout: any = null;
@@ -40,11 +40,12 @@ export class TextEditorComponent implements OnInit {
   isErrorMe = false;
   permission!: Permission;
   textSaving = false;
+  editor: any;
 
   constructor(
     private webSocketService: WebsocketService,
     private activateRoute: ActivatedRoute,
-    private textService: TextService,
+    public textService: TextService,
     private userService: UserService,
     private router: Router,
     public dialog: MatDialog
@@ -65,6 +66,23 @@ export class TextEditorComponent implements OnInit {
     this.webSocketService.usersInRoom.subscribe((usersInRoom) => {
       this.usersInRoom = usersInRoom;
     });
+  }
+
+  saveToPDF(): void {
+    let html = document.getElementById('textContainer');
+
+    var opt = {
+      margin: 0,
+      filename: 'myfile.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+    };
+
+    // New Promise-based usage:
+    html2pdf().set(opt).from(html).save();
+  }
+
+  ngOnInit(): void {
     this.userService.getMe().subscribe({
       next: (userData) => {
         this.isLoadingMe = false;
@@ -80,17 +98,17 @@ export class TextEditorComponent implements OnInit {
                 const roomData = JSON.parse(data);
                 this.permission = roomData.userPermission;
 
-                this.text = roomData.data;
-                this.titleCtrl.setValue(this.text?.title);
+                //this.textService.text = roomData.data;
+                //this.text = roomData.data;
+
+                this.titleCtrl.setValue(this.textService.text?.title);
                 if (this.permission == 'read') {
                   this.titleCtrl.disable();
                 }
                 this.webSocketService.addUsers(roomData.users);
                 this.webSocketService.openWebSocket(
                   (payload: any) => {
-                    if (this.text) {
-                      this.text = payload;
-                    }
+                    this.editor.editor.applyDelta(payload);
                   },
                   id,
                   this.userMe
@@ -109,38 +127,26 @@ export class TextEditorComponent implements OnInit {
         this.isLoadingMe = false;
       },
     });
-  }
 
-  saveToPDF(): void {
-    let html = document.getElementById('textContainer');
-
-    var opt = {
-      margin: 0,
-      filename: 'myfile.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
-      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-    };
-
-    // New Promise-based usage:
-    html2pdf().set(opt).from(html).save();
-  }
-
-  ngOnInit(): void {
     window.onbeforeunload = () => this.ngOnDestroy();
+  }
+
+  onEditorCreated(editor: any): void {
+    this.editor = editor;
   }
 
   async saveChanges() {
     this.textSaving = true;
     this.textService
       .updateTextById(
-        this.text.id,
+        this.textService.text.id,
         this.titleCtrl.value,
-        this.text.content || ''
+        this.textService.text.content || ''
       )
       .subscribe(async (data) => {
         const previewImg = await this.screenshot();
         this.textService
-          .updateTextPreviewById(this.text.id, previewImg)
+          .updateTextPreviewById(this.textService.text.id, previewImg)
           .subscribe((d) => {
             this.textSaving = false;
           });
@@ -166,7 +172,7 @@ export class TextEditorComponent implements OnInit {
   share() {
     const dialogRef = this.dialog.open(DialogShareTextComponent, {
       data: {
-        textId: this.text.id,
+        textId: this.textService.text.id,
       },
       width: '6000px',
     });
@@ -178,11 +184,15 @@ export class TextEditorComponent implements OnInit {
 
   ContentChangedHandler(event: any) {
     if (this.permission == 'edit' || this.permission || 'owner') {
-      clearTimeout(this.timeout);
-      if (event.source === 'user' && this.text.content !== undefined) {
-        this.timeout = setTimeout(() => {
-          this.webSocketService.sendMessage(this.text);
-        }, 100);
+      //clearTimeout(this.timeout);
+      if (
+        event.source === 'user' &&
+        this.textService.text.content !== undefined
+      ) {
+        //this.timeout = setTimeout(() => {
+        //this.webSocketService.sendMessage(this.text);
+        this.webSocketService.sendMessage(event.delta.ops);
+        //}, 1);
       }
     }
   }

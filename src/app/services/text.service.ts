@@ -13,6 +13,8 @@ export interface Config {
   providedIn: 'root',
 })
 export class TextService {
+  public text!: Text;
+  public textId!: string;
   search(searchedTitle: string) {
     return this.http.get<SharedText[]>(
       `http://localhost:3000/text/search/${searchedTitle}`
@@ -46,6 +48,7 @@ export class TextService {
   }
 
   getTextById(id: string): Observable<any> {
+    this.textId = id;
     return this.http.get(`http://localhost:3000/text/${id}`, {
       responseType: 'text',
     });
