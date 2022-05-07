@@ -13,6 +13,8 @@ export class WebsocketService {
     []
   );
   public usersInRoom: Observable<User[]> = this._usersInRoom.asObservable();
+  private userEnter: any;
+  private userLeft: any;
 
   textId?: string;
   user?: User;
@@ -26,26 +28,34 @@ export class WebsocketService {
         },
       },
     });
-    this._socket.on('joinedRoom', (joinedUser: User[]) => {
-      this._usersInRoom.next(joinedUser);
+    this._socket.on('joinedRoom', ({ users, userJoined }) => {
+      this._usersInRoom.next(users);
+      this.userEnter(userJoined);
     });
-    this._socket.on('leftRoom', (leftUser: User[]) => {
-      this._usersInRoom.next(leftUser);
+    this._socket.on('leftRoom', ({ users, leftUser }) => {
+      this._usersInRoom.next(users);
+      this.userLeft(leftUser);
     });
   }
 
   public openWebSocket(
     callback: any,
+    callback2: any,
+    callback3: any,
+    callback4: any,
     updateTitle: any,
     textId: string,
     user: User
   ) {
+    this.userEnter = callback3;
+    this.userLeft = callback4;
     this.user = user;
     console.log(textId);
 
     this.textId = textId;
     this._socket.emit('joinRoom', { textId, user });
     this._socket.on('msgFromServer', callback);
+    this._socket.on('selectionChanged', callback2);
 
     this._socket.on('updatedTitle', (data) => {
       updateTitle(data);
@@ -70,6 +80,10 @@ export class WebsocketService {
 
   public updateTitle(title: string) {
     this._socket.emit('updateTitle', { textId: this.textId, title });
+  }
+
+  public selectionChanged(userId: string, range: any) {
+    this._socket.emit('rangeChange', { textId: this.textId, userId, range });
   }
 
   public addUsers(users: User[]) {

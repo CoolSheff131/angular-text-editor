@@ -15,9 +15,10 @@ let Quill: any = QuillNamespace;
 import { VideoHandler, ImageHandler, Options } from 'ngx-quill-upload';
 import ImageResize from 'quill-image-resize-module';
 import html2canvas from 'html2canvas';
-import html2pdf from 'html-to-pdf-js';
+import QuillCursors, { Cursor } from 'quill-cursors';
 import { Permission } from '../models/permission.model';
 
+Quill.register('modules/cursors', QuillCursors);
 Quill.register('modules/imageResize', ImageResize);
 Quill.register('modules/imageHandler', ImageHandler);
 Quill.register('modules/videoHandler', VideoHandler);
@@ -40,6 +41,8 @@ export class TextEditorComponent implements OnInit {
   permission!: Permission;
   textSaving = false;
   editor: any;
+  cursorsOne?: QuillCursors;
+  firstUsers?: any;
 
   constructor(
     private webSocketService: WebsocketService,
@@ -60,6 +63,7 @@ export class TextEditorComponent implements OnInit {
         accepts: ['png', 'jpg', 'jpeg', 'jfif'], // Extensions to allow for images (Optional) | Default - ['jpg', 'jpeg', 'png']
       } as Options,
       imageResize: true,
+      cursors: true,
     };
   }
 
@@ -74,8 +78,6 @@ export class TextEditorComponent implements OnInit {
         this.userMe = userData;
 
         this.webSocketService.usersInRoom.subscribe((usersInRoom) => {
-          console.log(usersInRoom);
-          console.log(this.userMe);
           this.usersInRoom =
             usersInRoom.filter((user) => user.id !== this.userMe.id) || [];
         });
@@ -94,10 +96,25 @@ export class TextEditorComponent implements OnInit {
                 if (this.permission == 'read') {
                   this.titleCtrl.disable();
                 }
+                this.firstUsers = roomData.users;
+
                 this.webSocketService.addUsers(roomData.users);
                 this.webSocketService.openWebSocket(
                   (payload: any) => {
                     this.editor.editor.applyDelta(payload);
+                  },
+                  (payload) => {
+                    this.cursorsOne?.moveCursor(payload.userId, payload.range);
+                  },
+                  (userEnter) => {
+                    this.cursorsOne?.createCursor(
+                      userEnter.id,
+                      userEnter.fullname,
+                      'blue'
+                    );
+                  },
+                  (userEnter) => {
+                    this.cursorsOne?.removeCursor(userEnter.id);
                   },
                   (data) => {
                     this.titleCtrl.setValue(data);
@@ -125,6 +142,13 @@ export class TextEditorComponent implements OnInit {
 
   onEditorCreated(editor: any): void {
     this.editor = editor;
+    this.cursorsOne = editor.getModule('cursors');
+
+    this.firstUsers.forEach((user) => {
+      console.log(user);
+
+      this.cursorsOne?.createCursor(user.id, user.fullname, 'blue');
+    });
   }
 
   async saveChanges() {
@@ -182,10 +206,15 @@ export class TextEditorComponent implements OnInit {
         this.textService.text.content !== undefined
       ) {
         //this.timeout = setTimeout(() => {
-        //this.webSocketService.sendMessage(this.text);
         this.webSocketService.sendMessage(event.delta.ops);
         //}, 1);
       }
+    }
+  }
+
+  selectionChangeHandler({ range, source }) {
+    if (source === 'user') {
+      this.webSocketService.selectionChanged(this.userMe.id, range);
     }
   }
 }

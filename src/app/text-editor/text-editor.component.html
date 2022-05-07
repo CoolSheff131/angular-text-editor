@@ -101,7 +101,8 @@
     <mat-card class="my-container" *ngIf="this.textService.text" id="textContainer">
         <quill-editor *ngIf="!isErrorText && !isLoadingText" [(ngModel)]="this.textService.text.content"
             [modules]="modules" (onContentChanged)="ContentChangedHandler($event)"
-            (onEditorCreated)="onEditorCreated($event)" [disabled]="permission == 'read'">
+            (onSelectionChanged)="selectionChangeHandler($event)" (onEditorCreated)="onEditorCreated($event)"
+            [disabled]="permission == 'read'">
         </quill-editor>
     </mat-card>
 </div>
