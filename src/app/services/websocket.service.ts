@@ -34,32 +34,42 @@ export class WebsocketService {
     });
   }
 
-  public openWebSocket(callback: any, textId: string, user: User) {
+  public openWebSocket(
+    callback: any,
+    updateTitle: any,
+    textId: string,
+    user: User
+  ) {
     this.user = user;
     console.log(textId);
 
     this.textId = textId;
     this._socket.emit('joinRoom', { textId, user });
     this._socket.on('msgFromServer', callback);
+
+    this._socket.on('updatedTitle', (data) => {
+      updateTitle(data);
+    });
     console.log(textId);
 
     this._socket.on('sendDataToJoinedUser', () => {
-      console.log(this.textService.text);
-
       this._socket.emit('sendTextInRoom', {
         textId,
         text: this.textService.text,
       });
     });
-    this._socket.once('getTextInRoom', (data) => {
-      console.log(data);
 
+    this._socket.once('getTextInRoom', (data) => {
       this.textService.text = data;
     });
   }
 
   public sendMessage(text: any) {
     this._socket.emit('msgToServer', { textId: this.textId, text });
+  }
+
+  public updateTitle(title: string) {
+    this._socket.emit('updateTitle', { textId: this.textId, title });
   }
 
   public addUsers(users: User[]) {

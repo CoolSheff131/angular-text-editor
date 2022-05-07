@@ -30,7 +30,6 @@ Quill.register('modules/videoHandler', VideoHandler);
 export class TextEditorComponent implements OnInit {
   usersInRoom: User[] | undefined;
   userMe!: User;
-  //  text!: Text;
   titleCtrl: FormControl;
   modules: any;
   timeout: any = null;
@@ -68,6 +67,10 @@ export class TextEditorComponent implements OnInit {
     });
   }
 
+  titleUpdated() {
+    this.webSocketService.updateTitle(this.titleCtrl.value);
+  }
+
   saveToPDF(): void {
     let html = document.getElementById('textContainer');
 
@@ -78,7 +81,6 @@ export class TextEditorComponent implements OnInit {
       jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
     };
 
-    // New Promise-based usage:
     html2pdf().set(opt).from(html).save();
   }
 
@@ -98,9 +100,6 @@ export class TextEditorComponent implements OnInit {
                 const roomData = JSON.parse(data);
                 this.permission = roomData.userPermission;
 
-                //this.textService.text = roomData.data;
-                //this.text = roomData.data;
-
                 this.titleCtrl.setValue(this.textService.text?.title);
                 if (this.permission == 'read') {
                   this.titleCtrl.disable();
@@ -109,6 +108,9 @@ export class TextEditorComponent implements OnInit {
                 this.webSocketService.openWebSocket(
                   (payload: any) => {
                     this.editor.editor.applyDelta(payload);
+                  },
+                  (data) => {
+                    this.titleCtrl.setValue(data);
                   },
                   id,
                   this.userMe

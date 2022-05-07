@@ -6,7 +6,7 @@
             </button>
         </div>
         <div class="header__inputs">
-            <input class="text__title" matInput [formControl]="titleCtrl" required>
+            <input class="text__title" matInput (keyup)="titleUpdated()" [formControl]="titleCtrl" required>
             <div class="buttons">
                 <button class="button" [disabled]="textSaving" *ngIf="permission != 'read'" (click)="saveChanges()">
                     SAVE
