@@ -28,7 +28,7 @@ Quill.register('modules/videoHandler', VideoHandler);
   styleUrls: ['./text-editor.component.css'],
 })
 export class TextEditorComponent implements OnInit {
-  usersInRoom: User[] | undefined;
+  usersInRoom: User[] = [];
   userMe!: User;
   titleCtrl: FormControl;
   modules: any;
@@ -61,27 +61,10 @@ export class TextEditorComponent implements OnInit {
       } as Options,
       imageResize: true,
     };
-
-    this.webSocketService.usersInRoom.subscribe((usersInRoom) => {
-      this.usersInRoom = usersInRoom;
-    });
   }
 
   titleUpdated() {
     this.webSocketService.updateTitle(this.titleCtrl.value);
-  }
-
-  saveToPDF(): void {
-    let html = document.getElementById('textContainer');
-
-    var opt = {
-      margin: 0,
-      filename: 'myfile.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
-      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-    };
-
-    html2pdf().set(opt).from(html).save();
   }
 
   ngOnInit(): void {
@@ -89,6 +72,13 @@ export class TextEditorComponent implements OnInit {
       next: (userData) => {
         this.isLoadingMe = false;
         this.userMe = userData;
+
+        this.webSocketService.usersInRoom.subscribe((usersInRoom) => {
+          console.log(usersInRoom);
+          console.log(this.userMe);
+          this.usersInRoom =
+            usersInRoom.filter((user) => user.id !== this.userMe.id) || [];
+        });
 
         this.activateRoute.paramMap
           .pipe(switchMap((params) => params.getAll('id')))
