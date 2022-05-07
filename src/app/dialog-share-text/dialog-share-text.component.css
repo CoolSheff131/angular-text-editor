@@ -6,3 +6,8 @@
 table {
   width: 100%;
 }
+
+.constantToken__content {
+  display: flex;
+  justify-content: space-between;
+}

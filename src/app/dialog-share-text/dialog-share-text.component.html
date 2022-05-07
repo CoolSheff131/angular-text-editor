@@ -2,6 +2,39 @@
     <mat-icon>group_add</mat-icon> Предоставьте доступ пользователям
 </h1>
 <div mat-dialog-content>
+    <h3>Постоянные ссылки</h3>
+    <div>
+        <div>
+            <div class="constantToken__title">Редактирование</div>
+            <div class="constantToken__content">
+                <span>{{ConstantEditToken}}</span>
+                <div>
+                    <a (click)="copyToken(ConstantEditToken)" class="action" mat-button>
+                        <mat-icon>file_copy</mat-icon>
+                    </a>
+                    <button mat-raised-button color="primary" (click)="generateConstantToken('edit')">
+                        Сгенерировать
+                        <mat-icon>link</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="constantToken__title">Чтение</div>
+            <div class="constantToken__content">
+                <span>{{ConstantReadToken}}</span>
+                <div>
+                    <a (click)="copyToken(ConstantReadToken)" class="action" mat-button>
+                        <mat-icon>file_copy</mat-icon>
+                    </a>
+                    <button mat-raised-button color="primary" (click)="generateConstantToken('read')">
+                        Сгенерировать
+                        <mat-icon>link</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <h3>Сгенерировать одноразовую ссылку</h3>
     <div>
         <mat-form-field appearance="fill">
@@ -12,14 +45,14 @@
                 </mat-option>
             </mat-select>
         </mat-form-field>
-        <button mat-raised-button color="primary" (click)="generateSingleLink()">
+        <button mat-raised-button color="primary" (click)="generateSingleToken()">
             Сгенерировать
             <mat-icon>link</mat-icon>
         </button>
     </div>
     <div>
         <h3>Одноразовые ссылки</h3>
-        <table *ngIf="!isLoadingLinks && !isErrorLinks" mat-table [dataSource]="tokens">
+        <table *ngIf="!isLoadingTokens && !isErrorTokens" mat-table [dataSource]="tokens">
             <ng-container matColumnDef="permission">
                 <th mat-header-cell *matHeaderCellDef>Разрешение</th>
                 <td mat-cell *matCellDef="let token"> {{token.permission}} </td>
@@ -34,10 +67,10 @@
             <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef>Действия</th>
                 <td mat-cell *matCellDef="let element" class="actions">
-                    <a (click)="copySignleLink(element.token)" class="action" mat-button>
+                    <a (click)="copyToken(element.token)" class="action" mat-button>
                         <mat-icon>file_copy</mat-icon>
                     </a>
-                    <a (click)="deleteSingleLink(element.id)" mat-button class="btn action">
+                    <a (click)="deleteSingleToken(element.id)" mat-button class="btn action">
                         <mat-icon>delete</mat-icon>
                     </a>
                 </td>

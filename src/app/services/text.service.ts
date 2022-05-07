@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Token } from '../dialog-share-text/dialog-share-text.component';
 import { SharedText } from '../main/main.component';
 import { Permission } from '../models/permission.model';
 import { Text } from '../models/text.model';
@@ -84,15 +85,16 @@ export class TextService {
     return this.http.post(`http://localhost:3000/text`, { title, content });
   }
 
-  share(textId: string, permission: Permission) {
+  share(textId: string, permission: Permission, isConstant = false) {
     return this.http.post(`http://localhost:3000/right-assignment-tokens`, {
       textId,
       permission,
+      isConstant,
     });
   }
 
-  getSingleSharedLinks(textId: string) {
-    return this.http.get(
+  getSingleSharedTokens(textId: string) {
+    return this.http.get<Token[]>(
       `http://localhost:3000/right-assignment-tokens/text/${textId}`
     );
   }

@@ -12,6 +12,8 @@ export interface DialogData {
 export interface Token {
   id: string;
   permission: Permission;
+  token: string;
+  isConstant: boolean;
 }
 
 export interface UserPermission {
@@ -30,14 +32,16 @@ export class DialogShareTextComponent implements OnInit {
   userPermissions: UserPermission[] = [];
   permissions: Permission[] = ['read', 'edit'];
 
-  isErrorLinks = false;
-  isLoadingLinks = true;
+  isErrorTokens = false;
+  isLoadingTokens = true;
   isErrorUserPermission = false;
   isLoadingUserPermission = true;
   displayedColumnsToken: string[] = ['id', 'permission', 'actions'];
   displayedColumnsUser: string[] = ['permission', 'user', 'actions'];
 
   selectedPermission: Permission;
+  ConstantEditToken = '';
+  ConstantReadToken = '';
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -45,30 +49,42 @@ export class DialogShareTextComponent implements OnInit {
     private _snackBar: MatSnackBar
   ) {
     this.textId = data.textId;
-    this.getSingleSharedLinks();
+    this.getSingleSharedTokens();
     this.getUserPermissions();
     this.selectedPermission = this.permissions[0];
   }
 
-  getSingleSharedLinks() {
+  getSingleSharedTokens() {
     this.textService
-      .getSingleSharedLinks(this.textId)
-      .subscribe((data: any) => {
-        this.tokens = data;
+      .getSingleSharedTokens(this.textId)
+      .subscribe((data: Token[]) => {
+        this.tokens = [];
+        data.forEach((token) => {
+          if (token.isConstant) {
+            if (token.permission == 'edit') {
+              this.ConstantEditToken = token.token;
+            } else if (token.permission == 'read') {
+              this.ConstantReadToken = token.token;
+            }
+          } else {
+            this.tokens.push(token);
+          }
+        });
+
         console.log(data);
 
-        this.isLoadingLinks = false;
+        this.isLoadingTokens = false;
       });
   }
 
-  copySignleLink(token: string) {
+  copyToken(token: string) {
     navigator.clipboard.writeText(token);
     this._snackBar.open('Скопировано!', 'ok', { duration: 2000 });
   }
 
-  deleteSingleLink(token: string) {
+  deleteSingleToken(token: string) {
     this.textService.deleteToken(token).subscribe((data) => {
-      this.getSingleSharedLinks();
+      this.getSingleSharedTokens();
     });
   }
 
@@ -85,12 +101,18 @@ export class DialogShareTextComponent implements OnInit {
     });
   }
 
-  generateSingleLink() {
+  generateSingleToken() {
     this.textService
       .share(this.textId, this.selectedPermission)
       .subscribe((data) => {
-        this.getSingleSharedLinks();
+        this.getSingleSharedTokens();
       });
+  }
+
+  generateConstantToken(permission: Permission) {
+    this.textService.share(this.textId, permission, true).subscribe((data) => {
+      this.getSingleSharedTokens();
+    });
   }
 
   ngOnInit(): void {}
