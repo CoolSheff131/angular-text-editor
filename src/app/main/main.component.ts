@@ -77,6 +77,8 @@ export class MainComponent implements OnInit {
       error: (error) => {
         this.isLoadingMe = false;
         this.isErrorMe = true;
+
+        this.signOut();
       },
     });
   }
