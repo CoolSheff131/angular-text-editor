@@ -92,6 +92,7 @@
 .table__item:hover {
   border-radius: 30px;
   border: none;
+  border-bottom: 1px solid transparent;
   background-color: #83d4ff7c;
 }
 
