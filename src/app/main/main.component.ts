@@ -146,7 +146,8 @@ export class MainComponent implements OnInit {
       data: '',
     });
     dialogRef.afterClosed().subscribe((name) => {
-      if (name) {
+      if (name && name != '') {
+        console.log('name');
         this.textService.create(name, '').subscribe({
           next: (data) => {
             this.openSnackBar('Текст создан');

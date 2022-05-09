@@ -2,10 +2,10 @@
 <div mat-dialog-content>
     <mat-form-field appearance="fill">
         <mat-label>Название текста</mat-label>
-        <input matInput [(ngModel)]="textName">
+        <input required matInput [(ngModel)]="textName">
     </mat-form-field>
 </div>
 <div mat-dialog-actions>
-    <button mat-raised-button color="primary" [mat-dialog-close]="textName" cdkFocusInitial>Создать</button>
+    <button mat-raised-button color="primary" (click)="onYesClick()">Создать</button>
     <button mat-button (click)="onNoClick()">Отмена</button>
 </div>
