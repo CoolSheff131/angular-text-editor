@@ -14,7 +14,20 @@ export interface Config {
   providedIn: 'root',
 })
 export class TextService {
-  public text!: Text;
+  public text: Text = {
+    id: '',
+    title: '',
+    content: '',
+    user: {
+      id: '',
+      avatarUrl: '',
+      email: '',
+      fullname: '',
+    },
+    previewUrl: null,
+    createdAt: '',
+    updatedAt: '',
+  };
   public textId!: string;
   search(searchedTitle: string) {
     return this.http.get<SharedText[]>(
@@ -70,10 +83,10 @@ export class TextService {
     );
   }
 
-  updateTextById(id: string, title: string, content: string): Observable<any> {
-    return this.http.patch(`http://localhost:3000/text/${id}`, {
-      title,
-      content,
+  updateTextById(): Observable<any> {
+    return this.http.patch(`http://localhost:3000/text/${this.text.id}`, {
+      title: this.text.title,
+      content: this.text.content,
     });
   }
 

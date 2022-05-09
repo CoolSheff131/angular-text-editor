@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs';
-import { Text } from '../models/text.model';
 import { User } from '../models/user.model';
 import { TextService } from '../services/text.service';
 import { UserService } from '../services/user.service';
@@ -15,7 +13,7 @@ let Quill: any = QuillNamespace;
 import { VideoHandler, ImageHandler, Options } from 'ngx-quill-upload';
 import ImageResize from 'quill-image-resize-module';
 import html2canvas from 'html2canvas';
-import QuillCursors, { Cursor } from 'quill-cursors';
+import QuillCursors from 'quill-cursors';
 import { Permission } from '../models/permission.model';
 
 Quill.register('modules/cursors', QuillCursors);
@@ -31,7 +29,6 @@ Quill.register('modules/videoHandler', VideoHandler);
 export class TextEditorComponent implements OnInit {
   usersInRoom: User[] = [];
   userMe!: User;
-  titleCtrl: FormControl;
   modules: any;
   timeout: any = null;
   isLoadingText = true;
@@ -43,7 +40,6 @@ export class TextEditorComponent implements OnInit {
   editor: any;
   cursorsOne?: QuillCursors;
   firstUsers?: any;
-  dateTextSaved?: Date;
 
   constructor(
     private webSocketService: WebsocketService,
@@ -53,8 +49,6 @@ export class TextEditorComponent implements OnInit {
     private router: Router,
     public dialog: MatDialog
   ) {
-    this.titleCtrl = new FormControl();
-
     this.modules = {
       toolbar: '#toolbar',
       imageHandler: {
@@ -69,9 +63,8 @@ export class TextEditorComponent implements OnInit {
   }
 
   titleUpdated() {
-    this.webSocketService.updateTitle(this.titleCtrl.value);
+    this.webSocketService.updateTitle();
   }
-
   ngOnInit(): void {
     this.userService.getMe().subscribe({
       next: (userData) => {
@@ -93,22 +86,13 @@ export class TextEditorComponent implements OnInit {
                 const roomData = JSON.parse(data);
                 this.permission = roomData.userPermission;
 
-                this.titleCtrl.setValue(this.textService.text?.title);
                 console.log(this.textService.text);
 
-                this.dateTextSaved = new Date(
-                  this.textService.text?.updatedAt || Date.now()
-                );
-                if (this.permission == 'read') {
-                  this.titleCtrl.disable();
-                }
                 this.firstUsers = roomData.users;
 
                 this.webSocketService.addUsers(roomData.users);
                 this.webSocketService.openWebSocket(
                   (payload: any) => {
-                    console.log(this.editor);
-
                     this.editor.editor.applyDelta(payload);
                   },
                   (payload) => {
@@ -123,15 +107,6 @@ export class TextEditorComponent implements OnInit {
                   },
                   (userLeft) => {
                     this.cursorsOne?.removeCursor(userLeft.id);
-                  },
-                  (data) => {
-                    this.titleCtrl.setValue(data);
-                  },
-                  (dateTextSaved) => {
-                    console.log('ASDASDASDASDASD');
-
-                    console.log(dateTextSaved);
-                    this.dateTextSaved = dateTextSaved;
                   },
                   id,
                   this.userMe
@@ -150,20 +125,15 @@ export class TextEditorComponent implements OnInit {
         this.isLoadingMe = false;
       },
     });
-
-    window.onbeforeunload = () => this.ngOnDestroy();
   }
 
   onEditorCreated(editor: any): void {
     console.log('RABOTAET');
-    console.log(editor);
 
     this.editor = editor;
     this.cursorsOne = editor.getModule('cursors');
 
     this.firstUsers.forEach((user) => {
-      console.log(user);
-
       this.cursorsOne?.createCursor(user.id, user.fullname, 'blue');
     });
   }
@@ -171,23 +141,17 @@ export class TextEditorComponent implements OnInit {
   async saveChanges() {
     const dateTextSaved = new Date();
     this.textSaving = true;
-    this.textService
-      .updateTextById(
-        this.textService.text.id,
-        this.titleCtrl.value,
-        this.textService.text.content || ''
-      )
-      .subscribe(async (data) => {
-        const previewImg = await this.screenshot();
-        this.textService
-          .updateTextPreviewById(this.textService.text.id, previewImg)
-          .subscribe((d) => {
-            console.log(dateTextSaved);
+    this.textService.updateTextById().subscribe(async (data) => {
+      const previewImg = await this.screenshot();
+      this.textService
+        .updateTextPreviewById(this.textService.text.id, previewImg)
+        .subscribe((d) => {
+          console.log(dateTextSaved);
 
-            this.webSocketService.textSaved(dateTextSaved);
-            this.textSaving = false;
-          });
-      });
+          this.webSocketService.textSaved(dateTextSaved);
+          this.textSaving = false;
+        });
+    });
   }
 
   async screenshot() {
@@ -207,7 +171,7 @@ export class TextEditorComponent implements OnInit {
   }
 
   share() {
-    const dialogRef = this.dialog.open(DialogShareTextComponent, {
+    this.dialog.open(DialogShareTextComponent, {
       data: {
         textId: this.textService.text.id,
       },

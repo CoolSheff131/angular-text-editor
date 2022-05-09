@@ -43,8 +43,7 @@ export class WebsocketService {
     selectionChanged: any,
     userEnter: any,
     userLeft: any,
-    updateTitle: any,
-    textSaved: any,
+
     textId: string,
     user: User
   ) {
@@ -56,10 +55,12 @@ export class WebsocketService {
     this._socket.emit('joinRoom', { textId, user });
     this._socket.on('msgFromServer', callback);
     this._socket.on('selectionChanged', selectionChanged);
-    this._socket.on('textSaved', textSaved);
+    this._socket.on('textSaved', (dateTextSaved) => {
+      this.textService.text.updatedAt = dateTextSaved;
+    });
 
     this._socket.on('updatedTitle', (data) => {
-      updateTitle(data);
+      this.textService.text.title = data;
     });
 
     this._socket.on('sendDataToJoinedUser', () => {
@@ -82,8 +83,11 @@ export class WebsocketService {
     this._socket.emit('textWasSaved', { textId: this.textId, dateTextSaved });
   }
 
-  public updateTitle(title: string) {
-    this._socket.emit('updateTitle', { textId: this.textId, title });
+  public updateTitle() {
+    this._socket.emit('updateTitle', {
+      textId: this.textId,
+      title: this.textService.text.title,
+    });
   }
 
   public selectionChanged(userId: string, range: any) {
