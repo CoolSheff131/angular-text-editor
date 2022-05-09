@@ -5,15 +5,24 @@
                 <mat-icon class="icon__back">arrow_back</mat-icon>
             </button>
         </div>
-        <div class="header__inputs">
+        <div>
+            <div>
+                Название
+            </div>
             <input class="text__title" [disabled]="permission == 'read'" matInput (keyup)="titleUpdated()"
                 [(ngModel)]="textService.text.title" required>
-            <div class="buttons">
-                <button class="button" [disabled]="textSaving" *ngIf="permission != 'read'" (click)="saveChanges()">
-                    SAVE
-                </button>
+        </div>
+
+        <button mat-button class="button" [disabled]="textSaving" *ngIf="permission != 'read'" (click)="saveChanges()">
+            Сохранить
+        </button>
+        <div>
+            <div>
+                Последнее сохранение
             </div>
-            {{textService.text.updatedAt}}
+            <div>
+                {{textService.text.updatedAt| date: 'medium'}}
+            </div>
         </div>
         <div class="users__wrapper">
             <ul class="users">
