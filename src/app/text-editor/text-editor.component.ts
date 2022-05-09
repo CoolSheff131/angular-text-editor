@@ -43,6 +43,7 @@ export class TextEditorComponent implements OnInit {
   editor: any;
   cursorsOne?: QuillCursors;
   firstUsers?: any;
+  dateTextSaved?: Date;
 
   constructor(
     private webSocketService: WebsocketService,
@@ -93,6 +94,11 @@ export class TextEditorComponent implements OnInit {
                 this.permission = roomData.userPermission;
 
                 this.titleCtrl.setValue(this.textService.text?.title);
+                console.log(this.textService.text);
+
+                this.dateTextSaved = new Date(
+                  this.textService.text?.updatedAt || Date.now()
+                );
                 if (this.permission == 'read') {
                   this.titleCtrl.disable();
                 }
@@ -101,6 +107,8 @@ export class TextEditorComponent implements OnInit {
                 this.webSocketService.addUsers(roomData.users);
                 this.webSocketService.openWebSocket(
                   (payload: any) => {
+                    console.log(this.editor);
+
                     this.editor.editor.applyDelta(payload);
                   },
                   (payload) => {
@@ -113,11 +121,17 @@ export class TextEditorComponent implements OnInit {
                       'blue'
                     );
                   },
-                  (userEnter) => {
-                    this.cursorsOne?.removeCursor(userEnter.id);
+                  (userLeft) => {
+                    this.cursorsOne?.removeCursor(userLeft.id);
                   },
                   (data) => {
                     this.titleCtrl.setValue(data);
+                  },
+                  (dateTextSaved) => {
+                    console.log('ASDASDASDASDASD');
+
+                    console.log(dateTextSaved);
+                    this.dateTextSaved = dateTextSaved;
                   },
                   id,
                   this.userMe
@@ -141,6 +155,9 @@ export class TextEditorComponent implements OnInit {
   }
 
   onEditorCreated(editor: any): void {
+    console.log('RABOTAET');
+    console.log(editor);
+
     this.editor = editor;
     this.cursorsOne = editor.getModule('cursors');
 
@@ -152,6 +169,7 @@ export class TextEditorComponent implements OnInit {
   }
 
   async saveChanges() {
+    const dateTextSaved = new Date();
     this.textSaving = true;
     this.textService
       .updateTextById(
@@ -164,6 +182,9 @@ export class TextEditorComponent implements OnInit {
         this.textService
           .updateTextPreviewById(this.textService.text.id, previewImg)
           .subscribe((d) => {
+            console.log(dateTextSaved);
+
+            this.webSocketService.textSaved(dateTextSaved);
             this.textSaving = false;
           });
       });

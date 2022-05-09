@@ -40,27 +40,27 @@ export class WebsocketService {
 
   public openWebSocket(
     callback: any,
-    callback2: any,
-    callback3: any,
-    callback4: any,
+    selectionChanged: any,
+    userEnter: any,
+    userLeft: any,
     updateTitle: any,
+    textSaved: any,
     textId: string,
     user: User
   ) {
-    this.userEnter = callback3;
-    this.userLeft = callback4;
+    this.userEnter = userEnter;
+    this.userLeft = userLeft;
     this.user = user;
-    console.log(textId);
 
     this.textId = textId;
     this._socket.emit('joinRoom', { textId, user });
     this._socket.on('msgFromServer', callback);
-    this._socket.on('selectionChanged', callback2);
+    this._socket.on('selectionChanged', selectionChanged);
+    this._socket.on('textSaved', textSaved);
 
     this._socket.on('updatedTitle', (data) => {
       updateTitle(data);
     });
-    console.log(textId);
 
     this._socket.on('sendDataToJoinedUser', () => {
       this._socket.emit('sendTextInRoom', {
@@ -76,6 +76,10 @@ export class WebsocketService {
 
   public sendMessage(text: any) {
     this._socket.emit('msgToServer', { textId: this.textId, text });
+  }
+
+  public textSaved(dateTextSaved: Date) {
+    this._socket.emit('textWasSaved', { textId: this.textId, dateTextSaved });
   }
 
   public updateTitle(title: string) {
