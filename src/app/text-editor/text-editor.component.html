@@ -13,7 +13,8 @@
                 [(ngModel)]="textService.text.title" required>
         </div>
 
-        <button mat-button class="button" [disabled]="textSaving" *ngIf="permission != 'read'" (click)="saveChanges()">
+        <button [disabled]="!textService.text.title" mat-button class="button" [disabled]="textSaving"
+            *ngIf="permission != 'read'" (click)="saveChanges()">
             Сохранить
         </button>
         <div>
