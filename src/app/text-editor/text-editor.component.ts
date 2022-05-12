@@ -55,7 +55,7 @@ export class TextEditorComponent implements OnInit {
         upload: (file) => {
           return this.textService.uploadImage(file);
         },
-        accepts: ['png', 'jpg', 'jpeg', 'jfif'], // Extensions to allow for images (Optional) | Default - ['jpg', 'jpeg', 'png']
+        accepts: ['png', 'jpg', 'jpeg', 'jfif'],
       } as Options,
       imageResize: true,
       cursors: true,
@@ -66,70 +66,64 @@ export class TextEditorComponent implements OnInit {
     this.webSocketService.updateTitle();
   }
   ngOnInit(): void {
-    this.userService.getMe().subscribe({
-      next: (userData) => {
-        this.isLoadingMe = false;
-        this.userMe = userData;
+    this.userService
+      .getMe()
+      .pipe(
+        switchMap((userData) => {
+          this.isLoadingMe = false;
+          this.userMe = userData;
 
-        this.webSocketService.usersInRoom.subscribe((usersInRoom) => {
-          this.usersInRoom =
-            usersInRoom.filter((user) => user.id !== this.userMe.id) || [];
-        });
-
-        this.activateRoute.paramMap
-          .pipe(switchMap((params) => params.getAll('id')))
-          .subscribe((id) => {
-            this.textService.getTextByIdToEdit(id).subscribe({
-              next: (data) => {
-                this.isLoadingText = false;
-                this.webSocketService.leaveRoom();
-                const roomData = JSON.parse(data);
-                this.permission = roomData.userPermission;
-
-                console.log(this.textService.text);
-
-                this.firstUsers = roomData.users;
-
-                this.webSocketService.addUsers(roomData.users);
-                this.webSocketService.openWebSocket(
-                  (payload: any) => {
-                    this.editor.editor.applyDelta(payload);
-                  },
-                  (payload) => {
-                    this.cursorsOne?.moveCursor(payload.userId, payload.range);
-                  },
-                  (userEnter) => {
-                    this.cursorsOne?.createCursor(
-                      userEnter.id,
-                      userEnter.fullname,
-                      'blue'
-                    );
-                  },
-                  (userLeft) => {
-                    this.cursorsOne?.removeCursor(userLeft.id);
-                  },
-                  id,
-                  this.userMe
-                );
-              },
-              error: (error) => {
-                this.isLoadingText = false;
-                this.isErrorText = true;
-                this.router.navigate(['textNotFound']);
-              },
-            });
+          this.webSocketService.usersInRoom.subscribe((usersInRoom) => {
+            this.usersInRoom =
+              usersInRoom.filter((user) => user.id !== this.userMe.id) || [];
           });
-      },
-      error: (error) => {
-        this.isErrorMe = true;
-        this.isLoadingMe = false;
-      },
-    });
+          return this.activateRoute.paramMap.pipe(
+            switchMap((params) => params.getAll('id')),
+            switchMap((id) => {
+              return this.textService.getTextByIdToEdit(id);
+            })
+          );
+        })
+      )
+      .subscribe({
+        next: (data) => {
+          this.isLoadingText = false;
+          this.webSocketService.leaveRoom();
+          const roomData = JSON.parse(data);
+          console.log(roomData);
+          this.permission = roomData.userPermission;
+          this.firstUsers = roomData.users;
+          this.webSocketService.addUsers(roomData.users);
+          this.webSocketService.openWebSocket(
+            (payload: any) => {
+              this.editor.editor.applyDelta(payload);
+            },
+            (payload) => {
+              this.cursorsOne?.moveCursor(payload.userId, payload.range);
+            },
+            (userEnter) => {
+              this.cursorsOne?.createCursor(
+                userEnter.id,
+                userEnter.fullname,
+                'blue'
+              );
+            },
+            (userLeft) => {
+              this.cursorsOne?.removeCursor(userLeft.id);
+            },
+            roomData.id,
+            this.userMe
+          );
+        },
+        error: (error) => {
+          this.isLoadingText = false;
+          this.isErrorText = true;
+          this.router.navigate(['textNotFound']);
+        },
+      });
   }
 
   onEditorCreated(editor: any): void {
-    console.log('RABOTAET');
-
     this.editor = editor;
     this.cursorsOne = editor.getModule('cursors');
 
@@ -141,17 +135,21 @@ export class TextEditorComponent implements OnInit {
   async saveChanges() {
     const dateTextSaved = new Date();
     this.textSaving = true;
-    this.textService.updateTextById().subscribe(async (data) => {
-      const previewImg = await this.screenshot();
-      this.textService
-        .updateTextPreviewById(this.textService.text.id, previewImg)
-        .subscribe((d) => {
-          console.log(dateTextSaved);
-
-          this.webSocketService.textSaved(dateTextSaved);
-          this.textSaving = false;
-        });
-    });
+    this.textService
+      .updateTextById()
+      .pipe(
+        switchMap(async () => {
+          const previewImg = await this.screenshot();
+          return this.textService.updateTextPreviewById(
+            this.textService.text.id,
+            previewImg
+          );
+        })
+      )
+      .subscribe((d) => {
+        this.webSocketService.textSaved(dateTextSaved);
+        this.textSaving = false;
+      });
   }
 
   async screenshot() {
